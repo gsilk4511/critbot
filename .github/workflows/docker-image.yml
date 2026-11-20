@@ -1,0 +1,42 @@
+name: Build CritBot Docker image
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: critbot-image-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out CritBot
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Build and publish to GitHub Container Registry
+        shell: bash
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [[ ! -f Dockerfile ]]; then
+            echo "::notice::Add a Dockerfile at the repository root to enable the CritBot image build."
+            exit 0
+          fi
+
+          image="ghcr.io/${GITHUB_REPOSITORY,,}"
+          commit_tag="sha-${GITHUB_SHA}"
+          docker build --label "org.opencontainers.image.source=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" \
+            --tag "$image:$commit_tag" --tag "$image:latest" .
+          printf '%s\n' "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+          docker push "$image:$commit_tag"
+          docker push "$image:latest"
