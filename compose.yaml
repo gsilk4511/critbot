@@ -1,13 +1,21 @@
 services:
   critbot:
-    build: .
+    image: ghcr.io/gsilk4511/critbot:latest
     container_name: critbot
     restart: unless-stopped
     env_file:
-      - .env
+      - ${CRITBOT_ENV_FILE:-.env}
     volumes:
-      - ./data:/app/data
-    ports:
-      - "5000:5000"
- # No inbound ports: Discord uses outbound connections;
-    # the built-in Cloudflare Tunnel reaches dashboard on 127.0.0.1:5000.
+      - type: bind
+        source: ${CRITBOT_DATA_DIR:?Set CRITBOT_DATA_DIR to the existing absolute CritBot data directory}
+        target: /app/data
+        bind:
+          create_host_path: false
+    # Nginx Proxy Manager forwards to http://critbot:5000 on this network.
+    networks:
+      - dashboard
+
+networks:
+  dashboard:
+    external: true
+    name: ${CRITBOT_DOCKER_NETWORK:-eth0}
