@@ -1,0 +1,109 @@
+/* WoW-inspired, locally sourced icon cards; no untrusted tooltip HTML */
+#cw-new-order .cc-result{display:flex;flex-direction:row;gap:10px;align-items:center;text-align:left}
+#cw-new-order .cc-result-info{display:flex;flex:1;flex-direction:column;min-width:0;gap:2px}
+#cw-new-order .cc-item-icon{width:42px;height:42px;flex:none;border:2px solid #725737;border-radius:6px;display:inline-flex;justify-content:center;align-items:center;background:radial-gradient(circle at 30% 30%,#4d3425,#131720);color:#f2b860;font-size:23px;overflow:hidden;box-shadow:0 2px 6px #0006}
+#cw-new-order .cc-item-icon img{width:100%;height:100%;object-fit:contain;image-rendering:auto}
+#cw-new-order .cc-item-icon-small{width:27px;height:27px;font-size:14px;border-width:1px}
+#cw-new-order .cc-selected-item{display:flex;align-items:center;gap:12px;margin:8px 0 12px}
+#cw-new-order .cc-selected-item h3{margin:0;line-height:1.14;overflow-wrap:anywhere}
+#cw-new-order .cc-reagent-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(152px,1fr));gap:6px;margin:10px 0;max-height:154px;overflow-y:auto}
+#cw-new-order .cc-reagent-grid>strong{grid-column:1/-1;color:#e5bb80;font-size:12px}
+#cw-new-order .cc-reagent{display:flex;align-items:center;gap:8px;background:#242a32;padding:6px;border:1px solid #55483e;border-radius:7px;font-size:11px;color:#e4d8c7;min-width:0;cursor:help}
+.cc-wow-tooltip{position:fixed;z-index:2147483647;width:min(340px,calc(100vw - 24px));max-height:min(500px,calc(100vh - 24px));overflow:auto;background:linear-gradient(145deg,#111524,#1c2133);border:2px solid #947c55;box-shadow:0 12px 40px #000d,0 0 0 1px #14131f inset;border-radius:7px;color:#f0e5c9;padding:13px;font:12px/1.5 system-ui,sans-serif;pointer-events:none}
+.cc-wow-tooltip[hidden]{display:none!important}
+.cc-wow-tooltip .cc-tip-head{display:flex;gap:10px;align-items:center;font-size:16px;color:#f3d090;margin-bottom:12px}
+.cc-wow-tooltip .cc-item-icon{width:44px;height:44px;border:2px solid #73593a;display:inline-flex;align-items:center;justify-content:center;background:#3a2c20;flex:none;border-radius:6px;color:#f8c36d;font-size:25px;overflow:hidden}
+.cc-wow-tooltip .cc-item-icon img{width:100%;height:100%;object-fit:cover}
+.cc-wow-tooltip .cc-item-icon-small{width:25px;height:25px;font-size:12px;border-width:1px}
+.cc-wow-tooltip .cc-tip-line{border-top:1px solid #ffffff15;display:grid;grid-template-columns:105px 1fr;gap:8px;padding:5px 0}
+.cc-wow-tooltip .cc-tip-line>span{color:#9ea8bb}.cc-wow-tooltip .cc-tip-line>strong{font-weight:500;color:#e5dfd7;overflow-wrap:anywhere}
+.cc-wow-tooltip .cc-tip-section{font-weight:800;color:#dcb780;margin:9px 0 4px}.cc-wow-tooltip .cc-tip-reagent{display:flex;align-items:center;gap:8px;padding:3px 0}
+.cc-wow-tooltip .cc-tip-source{display:block;color:#aba5a3;margin-top:9px;border-top:1px solid #ffffff20;padding-top:7px}
+@media(max-width:1100px){#cw-new-order .cc-item-icon{width:34px;height:34px;font-size:20px}#cw-new-order .cc-reagent-grid{grid-template-columns:1fr 1fr}}
+.cc-wow-tooltip .cc-tip-native{border-top:1px solid #927d5544;margin:8px 0;padding-top:8px;color:#d8d4d7;line-height:1.45}
+.cc-wow-tooltip .cc-tip-native>div:first-child{color:#e8c68a;font-weight:700}
+
+/* Rev L — actual item-cache content with classic Azeroth tooltip hierarchy. */
+:root{--wow-q0:#9d9d9d;--wow-q1:#f2f2f2;--wow-q2:#1eff00;--wow-q3:#0070dd;--wow-q4:#a335ee;--wow-q5:#ff8000}
+#cw-new-order .cc-item-icon{
+ background:linear-gradient(145deg,#43403d,#141824);border:2px solid #514947;
+ border-radius:4px;box-shadow:0 1px 0 #b7a77e66 inset,0 2px 8px #000b;
+}
+#cw-new-order .cc-item-icon img{object-fit:cover;display:block;width:100%;height:100%}
+#cw-new-order .cc-item-icon.cc-icon-unresolved{border-color:#51413b;opacity:.85}
+#cw-new-order .cc-item-icon.cc-quest-icon{font-family:Georgia,serif;font-weight:900;color:#ffd435;background:radial-gradient(circle,#3e3321,#181521);text-shadow:1px 2px 1px #000;font-size:27px}
+#cw-new-order .cc-result{outline-offset:-3px;min-height:64px!important}
+#cw-new-order .cc-result:hover,#cw-new-order .cc-result:focus-visible{background:linear-gradient(90deg,#483a33,#24232d)!important;outline:1px solid #a47c4d}
+#cw-new-order .cc-result .cc-item-icon{height:42px;width:42px}
+#cw-new-order .cc-selected-item{align-items:center;padding:8px 2px;border-bottom:1px solid #544b40}
+#cw-new-order .cc-selected-item .cc-item-icon{width:58px;height:58px}
+#cw-new-order .cc-selected-item h3{font-size:19px}
+#cw-new-order .quality-poor h3{color:var(--wow-q0)!important}
+#cw-new-order .quality-common h3{color:var(--wow-q1)!important}
+#cw-new-order .quality-uncommon h3{color:var(--wow-q2)!important}
+#cw-new-order .quality-rare h3{color:var(--wow-q3)!important}
+#cw-new-order .quality-epic h3{color:var(--wow-q4)!important}
+#cw-new-order .quality-legendary h3{color:var(--wow-q5)!important}
+#cw-new-order .cc-reagent{transition:border-color .1s,background .1s}
+#cw-new-order .cc-reagent:hover,#cw-new-order .cc-reagent:focus{border-color:#b5a16e;background:#343136}
+.cc-wow-tooltip{
+ --item-color:#fff;
+ width:min(366px,calc(100vw - 24px));
+ max-height:min(610px,calc(100vh - 24px));
+ box-sizing:border-box;overflow:hidden;
+ background:linear-gradient(180deg,rgba(15,18,31,.995),rgba(8,11,20,.995));
+ border:2px solid #68729b;border-radius:5px;
+ box-shadow:0 0 0 1px #131728 inset,0 0 0 2px #0009,0 14px 50px #000e;
+ padding:12px 13px 11px;color:#f9f9f9;
+ font-family:Friz Quadrata,Georgia,serif;font-size:13px;line-height:1.42;
+ pointer-events:none;
+}
+.cc-wow-tooltip.quality-poor{--item-color:var(--wow-q0)}
+.cc-wow-tooltip.quality-common{--item-color:var(--wow-q1)}
+.cc-wow-tooltip.quality-uncommon{--item-color:var(--wow-q2)}
+.cc-wow-tooltip.quality-rare{--item-color:var(--wow-q3)}
+.cc-wow-tooltip.quality-epic{--item-color:var(--wow-q4)}
+.cc-wow-tooltip.quality-legendary{--item-color:var(--wow-q5)}
+.cc-wow-tooltip.tip-quest{--item-color:#ffce4b}
+.cc-wow-tooltip .cc-tooltip-heading{display:flex;align-items:center;gap:11px;padding-bottom:9px;border-bottom:1px solid #5b627342}
+.cc-wow-tooltip .cc-tip-hero-icon{height:48px;width:48px;min-width:48px;border:2px solid #6c644e;background:#131a28;border-radius:4px}
+.cc-wow-tooltip .cc-tip-hero-icon img{width:100%;height:100%;object-fit:cover}
+.cc-wow-tooltip .cc-title-group{display:flex;flex-direction:column;min-width:0;gap:4px}
+.cc-wow-tooltip .cc-tip-name{display:block;font-size:16px;line-height:1.15;color:var(--item-color);font-family:Georgia,serif;overflow-wrap:anywhere}
+.cc-wow-tooltip .cc-tip-category{letter-spacing:.7px;color:#b9b8af;font-size:10px;font-weight:600}
+.cc-wow-tooltip .cc-tooltip-content{max-height:min(478px,calc(100vh - 178px));overflow-y:auto;padding-top:7px;scrollbar-color:#424c6f #0b0f1c;scrollbar-width:thin}
+.cc-wow-tooltip .cc-wow-line{display:flex;justify-content:space-between;gap:12px;padding:3px 0}
+.cc-wow-tooltip .cc-wow-line span{color:#bfc4cb;flex:none}
+.cc-wow-tooltip .cc-wow-line strong{color:#f1efe8;text-align:right;font-weight:400;overflow-wrap:anywhere}
+.cc-wow-tooltip .cc-native-line{margin:4px 0;font:inherit;color:#eaeaea;overflow-wrap:anywhere}
+.cc-wow-tooltip .cc-native-effect{color:#1eff00}
+.cc-wow-tooltip .cc-native-requires{color:#ef6b6b}
+.cc-wow-tooltip .cc-native-flavor{color:#e8c98b;font-style:italic;margin-top:8px}
+.cc-wow-tooltip .cc-tip-itemlevel{font-size:12px;color:#ffdf9f;margin:3px 0 5px}
+.cc-wow-tooltip .cc-tip-summary,.cc-wow-tooltip .cc-tip-skill{color:#e6e6e6;margin:5px 0}
+.cc-wow-tooltip .cc-tip-skill{color:#e4b877}
+.cc-wow-tooltip .cc-tip-unverified{color:#9da5b5;font:11px/1.4 system-ui,sans-serif;margin:8px 0}
+.cc-wow-tooltip .cc-tip-id{font:10px system-ui,sans-serif;color:#959ba8;margin-top:8px}
+.cc-wow-tooltip .cc-tip-reagents{border-top:1px solid #68729b50;margin-top:10px;padding-top:8px}
+.cc-wow-tooltip .cc-tip-reagents-title{display:block;color:#eee;margin-bottom:6px;font-size:12px}
+.cc-wow-tooltip .cc-tip-reagent{display:flex;align-items:center;gap:9px;margin:5px 0;font-size:12px}
+.cc-wow-tooltip .cc-item-icon-small{width:27px;height:27px;border:1px solid #746c52;flex:none;overflow:hidden}
+.cc-wow-tooltip .cc-tip-source{display:block;padding-top:7px;margin-top:8px;border-top:1px solid #68729b32;color:#9ca3b1;font:10px/1.4 system-ui,sans-serif}
+.cc-wow-tooltip .cc-tip-objective{margin:10px 0;color:#fff}
+.cc-wow-tooltip .cc-tip-need{margin:8px 0;color:#edc88a}
+#cw-new-order .cc-result.quality-uncommon .cc-result-title strong{color:var(--wow-q2)}
+#cw-new-order .cc-result.quality-rare .cc-result-title strong{color:#54adff}
+#cw-new-order .cc-result.quality-epic .cc-result-title strong{color:#c083ff}
+#cw-new-order .cc-result.quality-legendary .cc-result-title strong{color:var(--wow-q5)}
+#cw-new-order .cc-preview-flavor{color:#e8c98b;font:italic 12px/1.45 Georgia,serif;margin:4px 0}
+/* The existing browser-result selector is intentionally more specific than the legacy column rule. */
+#cw-new-order #ftc-catalog-results.cc-results .cc-result{
+ display:flex;flex-direction:row;align-items:center;gap:11px;
+ text-align:left;padding:10px 14px;min-height:64px;
+}
+
+/* Verified icons remain clear and sharp. Unresolved IDs show item-type art,
+   never a wall of identical question-mark slots. */
+.cc-item-icon img {object-fit:cover;image-rendering:auto;}
+.cc-icon-unresolved {border-color:#806c50!important;}
+.cc-icon-unresolved img {filter:saturate(.85);}

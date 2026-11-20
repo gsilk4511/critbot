@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block heading %}Activities & Reports{% endblock %}
+{% block subheading %}Organize guild activity challenges, achievement appearance, and downloadable reports.{% endblock %}
+{% block content %}
+<div class="ops-banner"><strong>What is this section for?</strong><span>These are optional management utilities, not the Discord bot's core features. Nothing here changes guild ranks or permissions.</span></div>
+<div class="ops-action-grid guild-tool-cards">
+{% if can_access('competitions') %}<a class="ops-action" href="{{url_for('product.seasons')}}"><span>🏆</span><strong>Run an activity challenge</strong><small>Start a timed leaderboard for tracked Discord messages or voice time. Members compete; lifetime statistics are not reset.</small><b>Manage challenges →</b></a>{% endif %}
+{% if can_access('branding') %}<a class="ops-action" href="{{url_for('product.brand')}}"><span>🎨</span><strong>Customize achievement cards</strong><small>Choose the guild name, accent color and card style used for achievement unlock artwork.</small><b>Edit card appearance →</b></a>{% endif %}
+{% if can_access('exports') %}<div class="ops-action"><span>📊</span><strong>Download member statistics</strong><small>Export the member activity and achievement totals as a CSV for spreadsheets. This doesn't change any guild data.</small><a class="btn" href="{{url_for('product.export')}}">Download CSV</a></div>{% endif %}
+</div>
+{% endblock %}

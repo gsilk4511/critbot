@@ -1,0 +1,36 @@
+{% extends 'base.html' %}{% block heading %}Find Groups{% endblock %}{% block subheading %}Instant parties for dungeons, leveling and questing — not scheduled guild events{% endblock %}
+{% block content %}
+<section class="ge-workspace ge-groups">
+ <header class="ge-page-head"><div><span class="hub-kicker">PLAY TOGETHER RIGHT NOW</span><h2>Find your group</h2><p>Join a party or start one. These aren't calendar events.</p></div><div class="ge-head-actions"><a href="{{url_for('events.home')}}">Guild events ↗</a><a href="{{url_for('hub.home')}}">Guild Hub ↗</a>{% if dev_preview %}<a href="/dev-discord-preview">Preview Discord embed ↗</a>{% endif %}</div></header>
+ <div class="ge-columns">
+  <div class="ge-panel ge-list-panel"><div class="ge-pane-top"><h3>Open groups</h3><span>Dungeon · Leveling · Questing</span></div>
+    <div class="ge-search-row"><input type="search" id="ge-find-search" placeholder="Search dungeon, zone, quest…" aria-label="Search available groups"><select id="ge-find-type" aria-label="Filter groups"><option value="all">All groups</option><option value="dungeon">Dungeons</option><option value="leveling">Leveling</option><option value="questing">Questing</option></select></div>
+    <div class="ge-list" id="ge-find-list">
+    {% for e in dungeons %}<article class="ge-group-card" data-kind="dungeon"><div><small class="ge-caps">⚔ DUNGEON · {{e.status|upper}}</small><strong>{{e.title}}</strong><p>{{e.description[:90] if e.description else 'Role-based dungeon party'}}</p><div class="ge-card-meta"><span>{{e.count}} / 5 members</span><span>{{e.open_count}} slots open</span></div></div><a href="{{e.link}}">{{'Roster' if e.joined else 'Join'}} →</a></article>{% endfor %}
+    {% for e in instant %}<article class="ge-group-card" data-kind="{{e.kind}}"><div><small class="ge-caps">{{'✦ QUESTING' if e.kind=='questing' else '✦ LEVELING'}} · {{e.zone}}</small><strong>{{e.title}}</strong><p>Level {{e.min_level}}–{{e.max_level}}{% if e.notes %} · {{e.notes[:85]}}{% endif %}</p><div class="ge-card-meta"><span>{{e.count}} / {{e.capacity}} players</span><span>{{e.open_count}} spots open</span></div></div><a href="{{e.link}}">{{'Roster' if e.joined else 'Join'}} →</a></article>{% endfor %}
+    </div><div id="ge-find-empty" class="ge-muted" hidden>No groups match your search.</div>
+    <footer class="ge-pager"><button id="ge-prev" type="button">← Prev</button><span id="ge-page">1 / 1</span><button id="ge-next" type="button">Next →</button></footer>
+  </div>
+  <div class="ge-panel ge-create-panel"><div class="ge-pane-top"><h3>Start a group</h3><span>Visible to guildmates</span></div>
+   <form action="{{url_for('groups.create')}}" method="post" id="ge-create-form">
+    <div class="ge-form-row"><label>Group type<select id="ge-create-kind" name="kind"><option value="dungeon">Dungeon — roles & roster</option><option value="leveling">Leveling — zone & level range</option><option value="questing">Questing — zone & quest</option></select></label><label>My character<select name="character_id" required><option value="">Choose main or alt</option>{% for c in characters %}<option value="{{c.id}}">{{c.name}} · {{c.class_name}} {{'(Main)' if c.is_main else '(Alt)'}}</option>{% endfor %}</select></label></div>
+    {% if not characters %}<div class="ge-notice">Add a character first to lead a group. <a href="{{url_for('characters.home')}}">Manage characters ↗</a></div>{% endif %}
+    <div id="ge-dungeon-fields" class="ge-form-set">
+      <label>Dungeon name<input name="dungeon" id="ge-dungeon" placeholder="Ragefire Chasm, Wailing Caverns…" maxlength="80"></label>
+      <div class="ge-form-row"><label>My role<select name="role" id="ge-role"><option value="">Choose role</option><option>Tank</option><option>Healer</option><option>DPS</option></select></label><label>Post in Discord<select name="channel_id" id="ge-channel"><option value="">Select channel</option>{% for c in channels %}<option value="{{c.channel_id}}">#{{c.name}}</option>{% endfor %}</select></label></div>
+      <label>Or enter channel ID<input name="channel_id_manual" placeholder="Only if channel isn't listed" inputmode="numeric" maxlength="22" pattern="[0-9]{15,22}"></label>
+      <div class="ge-notice">1 tank · 1 healer · 3 DPS. A recruiting message is queued in Discord, never a Scheduled Event.</div>
+    </div>
+    <div id="ge-adventure-fields" class="ge-form-set" hidden>
+      <div class="ge-form-row"><label>Zone / location<input id="ge-zone" name="zone" maxlength="100" placeholder="Silverpine Forest"></label><label>Requested level range<div class="ge-levels"><input id="ge-min-level" type="number" min="1" max="60" name="min_level" value="10"><span>to</span><input type="number" min="1" max="60" name="max_level" value="20"></div></label></div>
+      <div id="ge-quest-field" hidden><label>Quest name (optional)<input name="quest_name" id="ge-quest" maxlength="110" placeholder="Search / enter the quest you're doing"></label></div>
+      <label>Party size<select name="capacity"><option value="2">2 players</option><option value="3">3 players</option><option value="4">4 players</option><option value="5" selected>5 players</option></select></label>
+      <div class="ge-notice">No bank supplies, no crafting order, and no event date. Dashboard group rosters are available immediately.</div>
+    </div>
+    <label>Details (optional)<textarea name="notes" maxlength="600" rows="2" placeholder="Meeting spot, goals, pace, special requirements…"></textarea></label>
+    <div class="ge-actions"><button type="submit" class="ge-primary" {% if not characters %}disabled{% endif %}>Create group →</button><a href="{{url_for('characters.home')}}">Main & alts ↗</a></div>
+   </form>
+  </div>
+ </div>
+</section><script defer src="{{url_for('static',filename='group_finder.js',v='1')}}"></script>
+{% endblock %}

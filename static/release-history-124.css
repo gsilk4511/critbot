@@ -1,0 +1,24 @@
+/* 1.2.4: remove small fixed-height release-history box and the nested scrollbar. */
+.ftc-main .cb-history{display:flex!important;flex-direction:column!important;width:100%!important;max-width:1500px!important;height:auto!important;max-height:none!important;min-height:0!important;overflow:visible!important;gap:18px!important;margin:0 auto!important;padding-bottom:22px!important}
+.ftc-main .cb-history-body{display:block!important;flex:none!important;min-width:0!important;width:100%!important;height:auto!important;max-height:none!important;min-height:0!important;overflow:visible!important;background:transparent!important;border:0!important;border-radius:0!important}
+.ftc-main .cb-history-pane{display:block!important;width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;overscroll-behavior:auto!important;padding:0!important;box-sizing:border-box!important}
+.ftc-main .cb-history-pane[hidden]{display:none!important}
+.ftc-main .cb-history-tabs{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px!important;width:100%!important}
+.ftc-main .cb-history-tabs button{padding:15px 19px!important;text-align:left!important;font-size:16px!important;min-width:0!important}
+.ftc-main .cb-history-tabs span{display:block;margin:5px 0 0!important;font-size:12px!important}
+.ftc-main .cb-history-intro{background:#20212a;border:1px solid #564538;border-radius:12px;padding:20px 24px!important;margin:0 0 14px!important}
+.ftc-main .cb-history-intro h3{font-size:23px!important}
+.ftc-main .cb-history-intro p{font-size:13px!important;line-height:1.55!important}
+.ftc-main .cb-history-filter{margin-bottom:15px!important}
+.ftc-main .cb-version-stack{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px!important;align-items:start!important}
+.ftc-main .cb-version-entry{min-width:0;overflow:hidden}
+.ftc-main .cb-version-entry>summary{padding:19px 21px!important;align-items:center!important}
+.ftc-main .cb-version-summary strong{font-size:15px!important;line-height:1.35}
+.ftc-main .cb-version-summary small{font-size:12px!important}
+.ftc-main .cb-version-changes{padding:16px 22px 22px!important;display:grid!important;gap:14px!important}
+.ftc-main .cb-version-subsection ul{gap:9px!important;font-size:13px!important;line-height:1.55!important}
+.ftc-main .cb-history-head h2{font-size:28px!important}
+.ftc-main .cb-history-archive-note{grid-column:1/-1;line-height:1.55}
+.ftc-main .cb-history-note{padding:18px 0 8px;line-height:1.6}
+@media(max-width:1050px){.ftc-main .cb-version-stack{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:650px){.ftc-main .cb-history-tabs{gap:6px!important}.ftc-main .cb-history-tabs button{padding:11px!important;font-size:13px!important}.ftc-main .cb-history-head{flex-wrap:wrap}.ftc-main .cb-history-intro{padding:14px!important}.ftc-main .cb-version-entry>summary{padding:13px!important}.ftc-main .cb-version-changes{padding:13px!important}}

@@ -1,0 +1,48 @@
+<dialog class="cw-dialog cw-board-dialog cc-studio" id="cw-new-order" aria-labelledby="cc-title">
+ <header class="cc-head">
+  <div class="cc-brand">⚔</div>
+  <div class="cc-head-text"><span class="hub-kicker">FLICK THE CRIT · REQUEST BOARD</span><h2 id="cc-title">Find it. Request it. Get back to playing.</h2><p>Pick the help you need. Search the game catalog, or write your own request.</p></div>
+  <button type="button" class="cc-close" data-close-dialog aria-label="Close request window">✕</button>
+ </header>
+ <form class="hub-order-form ftc-order-form cw-quick-form cc-form" id="ftc-new-order" method="post" action="{{url_for('requests.new')}}">
+  <input type="hidden" id="ftc-order-catalog-key" name="catalog_key">
+  {% if studio_origin|default('') == 'hub' %}<input type="hidden" name="origin" value="hub">{% endif %}
+  <input type="hidden" name="category" id="ftc-order-kind" value="Quest Help">
+  <nav class="cc-kinds" aria-label="Request category">
+   <div class="cc-column-label">I NEED HELP WITH</div>
+   <button type="button" class="cc-kind selected" data-cc-kind="Quest Help"><span class="cc-kind-icon">🗺</span><span><strong>Quest help</strong><small>Find a partner or party</small></span></button>
+   <button type="button" class="cc-kind" data-cc-kind="Crafting"><span class="cc-kind-icon">⚒</span><span><strong>Crafting order</strong><small>Commission an item</small></span></button>
+   <button type="button" class="cc-kind" data-cc-kind="Materials"><span class="cc-kind-icon">◈</span><span><strong>Materials</strong><small>Cloth, ore and more</small></span></button>
+   <button type="button" class="cc-kind" data-cc-kind="Help"><span class="cc-kind-icon">✦</span><span><strong>Other help</strong><small>Anything else</small></span></button>
+   <div class="cc-nav-note"><strong>Not on the list?</strong><span>You can always enter a custom quest or recipe name.</span></div>
+  </nav>
+  <section class="cc-browser" id="ftc-catalog-panel">
+   <div class="cc-column-head"><div><span class="cc-column-label" id="ftc-catalog-heading">QUEST LIBRARY</span><strong id="ftc-catalog-coverage">Find Horde quests by name, NPC, or zone.</strong></div><span id="ftc-catalog-count" class="cc-count">Loading</span></div>
+   <label class="cc-search"><span>⌕</span><input type="search" id="ftc-catalog-search" autocomplete="off" placeholder="Search quest, giver, zone…" aria-label="Search quest or crafted item"></label>
+   <div class="cc-filters">
+     <label id="ftc-profession-box" hidden>Profession <select id="ftc-order-profession"><option value="">All professions</option>{% for pro in professions|default(['Alchemy','Blacksmithing','Enchanting','Engineering','Leatherworking','Tailoring','Cooking','First Aid','Mining','Herbalism','Skinning','Fishing','Poisons','Lockpicking','Comprehension','Riding']) %}<option value="{{pro}}">{{pro}}</option>{% endfor %}</select></label>
+     <label id="ftc-zone-box">Zone <input type="search" id="ftc-zone-search" placeholder="Any zone" autocomplete="off"></label>
+     <label id="ftc-faction-box">Availability <select id="ftc-faction-filter"><option value="all">Horde + unverified</option><option value="verified">Horde-tagged only</option><option value="eligible">Horde + neutral only</option><option value="unknown">Unknown faction only</option></select></label>
+   </div>
+   <div class="cc-result-heading"><span id="cc-results-label">MATCHING QUESTS</span><span>Click to inspect</span></div>
+   <div class="ftc-catalog-list cc-results" id="ftc-catalog-results" role="listbox" aria-label="Catalog matches"><p class="ftc-catalog-empty">Loading entries…</p></div>
+   <footer class="cc-page-controls"><button type="button" id="cw-catalog-prev">← Previous</button><span id="cw-catalog-page">Page 1</span><button type="button" id="cw-catalog-next">Next →</button></footer>
+   <div class="cc-source-note" id="cc-source-note">Community client data; quests and recipes may differ in-game.</div>
+  </section>
+  <aside class="cc-details">
+   <div class="cc-inspection"><span class="cc-column-label">SELECTED ENTRY</span><div class="ftc-catalog-preview" id="ftc-catalog-preview"><div class="cc-empty-icon">⌕</div><strong>Choose a quest</strong><p>Its NPC, zone, requirements, and other available information appear here.</p></div></div>
+   <div class="cc-order-editor">
+    <div class="cc-editor-title"><strong>YOUR REQUEST</strong><span>Only the essentials</span></div>
+    <label>Your character<select name="character_id"><option value="">Choose later</option>{% for c in characters %}<option value="{{c.id}}">{{c.name}} · {{c.class_name}}</option>{% endfor %}</select></label>
+    <div class="cc-row"><label>Quest or item<input name="title" id="ftc-order-title" maxlength="90" minlength="3" required placeholder="Select from catalog or type here"></label><label id="ftc-order-quantity-label">Qty<input name="quantity" id="ftc-order-quantity" type="number" min="1" max="999" value="1"></label></div>
+    <div class="cc-row" id="cw-request-quest-meta"><label>Meet-up zone<input name="meeting_zone" maxlength="90" placeholder="Optional"></label><label>When<input name="availability" maxlength="110" placeholder="Tonight / flexible"></label></div>
+    <div class="cc-row" id="cw-request-craft-meta" hidden><label id="ftc-order-materials-box">Who provides materials?<select name="material_plan"><option>Discuss with helper</option><option>I have materials</option><option>Need materials</option><option>Ask guild for supplies</option></select></label><label id="ftc-order-tip-box">Optional tip<input name="offered_tip" maxlength="35" placeholder="No tip required"></label></div>
+    <label>Message to guildmates<textarea name="details" maxlength="850" rows="2" placeholder="Any special instructions? Optional."></textarea></label>
+    <button class="cc-submit" type="submit">Post request to the guild <span>→</span></button>
+   </div>
+  </aside>
+ </form>
+</dialog>
+<link rel="stylesheet" href="{{url_for('static',filename='catalog-studio.css',v='1')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='wow-item-tooltips.css',v='2')}}">
+<script defer src="{{url_for('static',filename='request-catalog.js',v='11')}}"></script>

@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block heading %}Guild Involvement{% endblock %}
+{% block subheading %}Private officer review queue{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{{url_for('static',filename='involvement-123.css',v='123')}}">{% endblock %}
+{% block content %}
+<div class="ci-results" id="involvement-results">
+  <header class="ci-results-header">
+    <div><span class="ci-eyebrow">MEMBER FEEDBACK</span><h2>Guild Involvement</h2><p>Find responses, assign follow-ups, and keep track of what members want from the guild.</p></div>
+    <a class="ci-export" href="{{url_for('involvement.export_csv',**filters)}}" title="Download only the currently filtered responses">↓ Export filtered CSV</a>
+  </header>
+
+  <nav class="ci-summary" aria-label="Review status filters">
+    {% for code,label in [('all','All responses'),('new','New'),('in_review','In review'),('follow_up','Follow-up'),('completed','Completed')] %}
+      <a class="ci-summary-item {{'ci-selected' if filters.status==code else ''}}" href="{{url_for('involvement.review',q=filters.q,status=code,reviewer=filters.reviewer,activity=filters.activity,sort=filters.sort)}}" aria-current="{{'page' if filters.status==code else 'false'}}">
+        <span>{{label}}</span><strong>{{all_count if code=='all' else counts[code]}}</strong>
+      </a>
+    {% endfor %}
+  </nav>
+
+  <form method="get" action="{{url_for('involvement.review')}}" class="ci-filter-bar" role="search">
+    <label class="ci-filter-search"><span>Search name or character</span><input type="search" name="q" value="{{filters.q}}" placeholder="Discord name, preferred name, or main…" maxlength="100" autocomplete="off"></label>
+    <label><span>Status</span><select name="status"><option value="all">All statuses</option>{% for code in statuses %}<option value="{{code}}" {{'selected' if filters.status==code else ''}}>{{code|replace('_',' ')|title}}</option>{% endfor %}</select></label>
+    <label><span>Reviewer</span><select name="reviewer"><option value="all">Everyone</option><option value="mine" {{'selected' if filters.reviewer=='mine' else ''}}>Assigned to me</option><option value="unassigned" {{'selected' if filters.reviewer=='unassigned' else ''}}>Unassigned</option>{% for r in reviewers %}<option value="{{r.discord_id}}" {{'selected' if filters.reviewer==r.discord_id else ''}}>{{r.display_name}}</option>{% endfor %}</select></label>
+    <label><span>Interest</span><select name="activity"><option value="all">All interests</option>{% for a in activity_options %}<option value="{{a}}" {{'selected' if filters.activity==a else ''}}>{{a}}</option>{% endfor %}</select></label>
+    <label><span>Sort by</span><select name="sort"><option value="needs_attention" {{'selected' if filters.sort=='needs_attention' else ''}}>Needs attention</option><option value="newest" {{'selected' if filters.sort=='newest' else ''}}>Newest submitted</option><option value="oldest" {{'selected' if filters.sort=='oldest' else ''}}>Oldest submitted</option><option value="updated" {{'selected' if filters.sort=='updated' else ''}}>Recently updated</option><option value="name" {{'selected' if filters.sort=='name' else ''}}>Member name A–Z</option></select></label>
+    <div class="ci-filter-actions"><button type="submit">Apply</button><a href="{{url_for('involvement.review')}}">Clear</a></div>
+  </form>
+
+  <div class="ci-results-toolbar"><p><strong>{{filtered_count}}</strong> matching {{'response' if filtered_count==1 else 'responses'}} <span>· Page {{page}} of {{pages}}</span></p><small>Click a member to read their answers and update their review.</small></div>
+
+  <div class="ci-queue">
+  {% for person in entries %}
+  <details class="ci-record" id="response-{{person.member_id}}">
+    <summary>
+      <span class="ci-record-avatar">{{(person.answers.get('preferred_name') or person.display_name or '?')[:1]|upper}}</span>
+      <span class="ci-record-person"><strong>{{person.answers.get('preferred_name') or person.display_name}}</strong><small>{{person.display_name if person.answers.get('preferred_name') and person.answers.get('preferred_name')!=person.display_name else 'Guild member'}} · Main: {{person.answers.get('main_name') or 'Not specified'}}</small></span>
+      <span class="ci-record-assigned">{{reviewer_names.get(person.assigned_to,'Unassigned' if not person.assigned_to else person.assigned_to)}}</span>
+      <span class="ci-record-updated">{{person.submitted_at[:10] if person.submitted_at else '—'}}</span>
+      <span class="ci-status ci-status-{{person.status}}">{{person.status|replace('_',' ')|title}}</span>
+      <span class="ci-record-chevron" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="ci-record-body">
+      <div class="ci-answer-grid">
+      {% for key,label,kind,choices in questions %}
+        {% if key not in ('preferred_name','main_name') %}
+        <div class="ci-record-answer {{'ci-answer-long' if kind=='textarea' else ''}}"><span>{{label}}</span>{% set answer=person.answers.get(key,'') %}{% if answer is sequence and answer is not string %}<div class="ci-tags">{% for value in answer %}<span>{{value}}</span>{% else %}<em>—</em>{% endfor %}</div>{% else %}<p>{{answer or '—'}}</p>{% endif %}</div>
+        {% endif %}
+      {% endfor %}
+      </div>
+      {% if can_handle %}
+      <form method="post" action="{{url_for('involvement.handle',member_id=person.member_id)}}" class="ci-handle-form">
+        {% for field in ('q','status','reviewer','activity','sort') %}<input type="hidden" name="return_{{field}}" value="{{filters[field]}}">{% endfor %}<input type="hidden" name="return_page" value="{{page}}">
+        <div class="ci-handle-head"><strong>Officer follow-up</strong><small>Only authorized handlers can change these fields</small></div>
+        <div class="ci-review-fields"><label>Review status<select name="status">{% for status in statuses %}<option value="{{status}}" {{'selected' if status==person.status else ''}}>{{status|replace('_',' ')|title}}</option>{% endfor %}</select></label><label>Assigned reviewer<select name="assigned_to"><option value="">Unassigned</option>{% for r in reviewers %}<option value="{{r.discord_id}}" {{'selected' if person.assigned_to==r.discord_id else ''}}>{{r.display_name}}</option>{% endfor %}</select></label></div>
+        <label class="ci-review-note">Private officer notes<textarea name="officer_note" maxlength="1500" rows="3" placeholder="Follow-up actions, context, or anything leadership needs to know…">{{person.officer_note}}</textarea></label>
+        <div class="ci-handle-actions"><button type="submit">Save review</button></div>
+      </form>
+      {% elif person.officer_note %}<div class="ci-record-answer ci-officer-read-note"><span>Private officer notes</span><p>{{person.officer_note}}</p></div>{% endif %}
+    </div>
+  </details>
+  {% else %}
+    <div class="ci-empty"><strong>No responses match those filters.</strong><p>Try another status, reviewer, or search term.</p><a href="{{url_for('involvement.review')}}">Show all responses</a></div>
+  {% endfor %}
+  </div>
+  {% if pages>1 %}
+  <nav class="ci-pages" aria-label="Review queue pages">
+    {% if page>1 %}<a href="{{url_for('involvement.review',q=filters.q,status=filters.status,reviewer=filters.reviewer,activity=filters.activity,sort=filters.sort,page=page-1)}}">← Previous</a>{% endif %}
+    <span>Page {{page}} / {{pages}}</span>
+    {% if page<pages %}<a href="{{url_for('involvement.review',q=filters.q,status=filters.status,reviewer=filters.reviewer,activity=filters.activity,sort=filters.sort,page=page+1)}}">Next →</a>{% endif %}
+  </nav>
+  {% endif %}
+  <p class="ci-privacy">Responses and CSV exports are private to authorized staff. Member answers aren't posted to Discord.</p>
+</div>
+{% endblock %}

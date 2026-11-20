@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block heading %}Feedback & Ideas{% endblock %}
+{% block subheading %}Tell us what works and what needs attention — privately{% endblock %}
+{% block content %}
+<div class="feedback-grid">
+<section class="studio-panel"><span class="profile-overline">GUILD VOICES</span><h2>Share your feedback</h2><p>This message goes to an authorized feedback inbox, not to a public Discord channel.</p>
+<form method="post" class="feedback-form">
+<label>What's this about?<select name="category" required>{% for key,value in categories.items() %}<option value="{{key}}">{{value}}</option>{% endfor %}</select></label>
+<label>Feedback type<select name="kind" required><option value="">Choose a type…</option>{% for key,value in kinds.items() %}<option value="{{key}}">{{value}}</option>{% endfor %}</select></label>
+<fieldset class="feedback-identity"><legend>How should your name appear?</legend>
+<label><input type="radio" name="identity_mode" value="anonymous"> Anonymous (no name stored)</label>
+<label><input type="radio" name="identity_mode" value="discord" checked> My Discord display name</label>
+<label><input type="radio" name="identity_mode" value="custom"> Use a custom name</label>
+<input name="custom_name" maxlength="80" placeholder="Custom display name" aria-label="Custom display name" id="feedback-custom-name" hidden></fieldset>
+<label>What would you like us to know?<textarea name="body" maxlength="2500" minlength="5" rows="7" required placeholder="Tell us about the idea, problem, or experience…"></textarea></label>
+<button type="submit" class="btn">Submit private feedback</button>
+</form></section>
+<section class="studio-panel feedback-how-it-works"><span class="profile-overline">WHAT HAPPENS NEXT</span><h2>Heard by guild leadership</h2><p>Only officers with Feedback Review permission can open the private inbox. If you choose Anonymous, your Discord identity is not recorded in the submission.</p><p>Looking to start a public conversation? Use <a href="{{url_for('suggestions.home')}}">Suggestions</a> instead.</p>{% if manager %}<p>Officer-only submissions are managed in the <strong>Officer inbox</strong> tab above.</p>{% endif %}</section>
+</div><script>document.querySelectorAll('input[name="identity_mode"]').forEach(r=>r.addEventListener('change',()=>{const v=document.querySelector('input[name="identity_mode"]:checked').value;const field=document.querySelector('#feedback-custom-name');field.hidden=v!=='custom';field.required=v==='custom'}));</script>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block heading %}Delete achievement{% endblock %}
+{% block subheading %}A permanent action with a deliberate confirmation step.{% endblock %}
+{% block content %}
+<section class="compact-panel danger-confirm"><span class="profile-eyebrow">DELETION CONFIRMATION</span>
+<h2>{{ item.icon }} {{ item.name }}</h2><p>{{ item.description }}</p>
+<div class="delete-facts"><span><strong>{{ unlocked }}</strong> unlocked members</span><span><strong>{{ queued }}</strong> pending queue actions</span><span><strong>{{ item.role_id or 'None' }}</strong> Discord reward role</span></div>
+{% if item.role_id and unlocked %}
+<div class="flash error">This achievement has a linked Discord role and unlocked members. Revoke those awards first and let the bot process them before deleting; otherwise roles could be left behind.</div>
+{% else %}
+<p>Deleting also removes its unlock records, queued awards, automatic milestones and related batch records. Existing Discord announcement messages are not erased.</p>
+<form method="post" class="delete-form"><label for="confirm_name">Type <strong>{{ item.name }}</strong> to confirm</label><input id="confirm_name" name="confirm_name" required autocomplete="off" placeholder="Exact achievement name" maxlength="80"><div class="actions"><button class="danger-button" type="submit">Permanently delete</button><a class="cancel" href="{{url_for('edit',achievement_id=item.id)}}">Keep achievement</a></div></form>
+{% endif %}
+</section>
+{% endblock %}

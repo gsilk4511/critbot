@@ -1,0 +1,14 @@
+# Tokens, production records, and mutable state must NEVER be committed.
+.env
+*.db
+*.db-wal
+*.db-shm
+data/
+backups/
+logs/
+__pycache__/
+*.pyc
+.venv/
+cloudflared
+.cloudflared-token
+*.log

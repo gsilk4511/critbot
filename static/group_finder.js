@@ -1,0 +1,7 @@
+(()=>{'use strict';const $=id=>document.getElementById(id);
+const type=$('ge-create-kind'),dungeon=$('ge-dungeon-fields'),adventure=$('ge-adventure-fields'),quest=$('ge-quest-field');
+function syncType(){if(!type)return;const d=type.value==='dungeon';dungeon.hidden=!d;adventure.hidden=d;quest.hidden=type.value!=='questing';$('ge-dungeon').required=d;$('ge-role').required=d;$('ge-zone').required=!d;$('ge-min-level').required=!d;}
+type?.addEventListener('change',syncType);syncType();
+const root=$('ge-find-list');if(!root)return;const search=$('ge-find-search'),filter=$('ge-find-type'),prev=$('ge-prev'),next=$('ge-next'),label=$('ge-page'),empty=$('ge-find-empty');let page=0;const size=5;
+function draw(reset=false){if(reset)page=0;const all=[...root.querySelectorAll('article.ge-group-card')];const q=(search.value||'').trim().toLowerCase(),kind=filter.value;const matching=all.filter(a=>(kind==='all'||a.dataset.kind===kind)&&(!q||a.textContent.toLowerCase().includes(q)));const pages=Math.max(1,Math.ceil(matching.length/size));page=Math.min(page,pages-1);all.forEach(a=>a.hidden=true);matching.slice(page*size,(page+1)*size).forEach(a=>a.hidden=false);label.textContent=`${page+1} / ${pages} · ${matching.length} groups`;prev.disabled=page===0;next.disabled=page===pages-1;empty.hidden=matching.length!==0;}
+search.addEventListener('input',()=>draw(true));filter.addEventListener('change',()=>draw(true));prev.addEventListener('click',()=>{page--;draw()});next.addEventListener('click',()=>{page++;draw()});draw();})();

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block heading %}Guild Members{% endblock %}{% block subheading %}Every guild member has a story — discover the people behind the characters{% endblock %}
+{% block content %}
+<section class="profile-directory-intro"><div><span class="profile-eyebrow">THE GUILD</span><h2>Our people. Our stories.</h2><p>Explore character stories, favorite activities, achievement collections, and their own artwork.</p></div><div class="profile-directory-count"><strong>{{members|length}}</strong><span>members</span></div></section>
+<div class="directory-toolbar"><label for="profile-search">Find a member</label><input type="search" id="profile-search" placeholder="Search names, class, or interests…" autocomplete="off"><select id="profile-filter" aria-label="Filter member profiles"><option value="all">All members</option><option value="customized">Customized profiles</option><option value="featured">With achievements</option><option value="blank">Not started yet</option></select><a class="profile-quicklink" href="{{url_for('member_profile',member_id=viewer.discord_id)}}">◉ My profile</a></div>
+<div class="directory-summary"><span>✦ Custom artwork & palettes</span><span>✧ Profile progress at a glance</span><span>🏆 Earned guild awards</span><span>🤝 Peer commendations</span></div>
+<div class="profile-grid profile-grid-v101" id="member-profile-grid">
+{% for m in members %}<a class="member-tile member-tile-v101 p-theme-{{m.theme}}" href="{{url_for('member_profile',member_id=m.member_id)}}" data-customized="{{'true' if m.personalized else 'false'}}" data-awards="{{m.award_count}}" data-search="{{(m.display_name ~ ' ' ~ m.username ~ ' ' ~ m.main_character ~ ' ' ~ m.main_class ~ ' ' ~ m.interests)|lower|e}}">
+  <div class="directory-cover p-banner-{{m.banner}}"><span class="directory-cover-logo">✦ FTC</span><span class="directory-cover-status">{{'✦ CUSTOMIZED' if m.personalized else 'NEW PROFILE'}}</span></div>
+  <div class="directory-person"><div class="directory-avatar avatar-tone-{{m.palette_index}} profile-icon-wrap">{% if m.portrait in portraits %}<img class="profile-icon-art" src="{{url_for('static',filename=portraits[m.portrait].file)}}" alt="">{% else %}{{m.display_name[:1]|upper}}{% endif %}{% if m.portrait_emblem in emblems and emblems[m.portrait_emblem].file %}<img class="profile-icon-emblem" src="{{url_for('static',filename=emblems[m.portrait_emblem].file)}}" alt="">{% endif %}</div><div><strong>{{m.display_name}}</strong><small>@{{m.username}}</small></div><span class="member-tile-arrow">↗</span></div>
+  <p class="directory-role">{{m.main_character or 'Character not listed'}}{% if m.main_class %} · {{m.main_class}}{% endif %}</p>
+  <p class="directory-tagline">{{m.tagline or ('Working on their legend…' if not m.personalized else (m.interests or 'A guild legend in the making'))}}</p>
+  <div class="directory-bottom"><span>🏆 {{m.award_count}} award{{'' if m.award_count==1 else 's'}}</span><span>🤝 {{m.commendation_count or 0}} commendations</span></div><div class="directory-progress"><i style="width:{{m.completion}}%"></i></div>
+  {% if m.member_id==viewer.discord_id %}<span class="member-tile-self">YOUR PROFILE</span>{% endif %}
+</a>{% else %}<div class="profile-empty">No guild members synced yet. The bot will populate the directory after connecting.</div>{% endfor %}
+</div><p id="member-empty-search" class="profile-empty" hidden>No members match your filters.</p>
+<div class="cw-page-pager" id="cw-directory-pager"><button type="button" id="cw-directory-prev">← Previous</button><span id="cw-directory-page">Page 1</span><button type="button" id="cw-directory-next">Next →</button></div>
+<script defer src="{{url_for('static',filename='workstation4.js',v='4')}}"></script>
+{% endblock %}

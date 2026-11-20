@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block heading %}{{'Your Guild Hub preferences' if editing else 'Welcome to Flick the Crit'}}{% endblock %}
+{% block subheading %}A few choices. No paperwork. Let's get you into the guild.{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{{url_for('static',filename='guild-hub.css',v='hub1')}}">{% endblock %}
+{% block content %}
+<section class="hub-welcome-layout">
+ <div class="hub-welcome-art" aria-hidden="true"><div class="hub-welcome-art-inner"><span>F L I C K &nbsp; T H E &nbsp; C R I T</span><h2>Your guild.<br>Your adventures.</h2><p>Find your crew, join something ridiculous, and make some memories.</p></div></div>
+ <div class="hub-wizard-panel" id="hub-wizard">
+  <div class="hub-wizard-top"><span class="hub-eyebrow">{{'PERSONALIZE' if editing else 'GETTING STARTED'}}</span><span id="wizard-step-label">01 / 03</span></div>
+  <div class="hub-progress" aria-hidden="true"><i></i><i></i><i></i></div>
+  <form id="hub-onboard-form" method="post" action="{{url_for('hub.welcome')}}">
+   <div class="hub-step" data-step="0">
+    <h2>What are you into?</h2><p class="hub-muted">Pick whatever sounds good. You can explore everything else, too.</p>
+    <div class="hub-interest-grid">
+    {% for label,symbol,subtitle in interests %}
+     <label class="hub-interest-card"><input type="checkbox" name="interests" value="{{label}}" {% if label in pref.interests %}checked{% endif %}>
+      <span class="hub-interest-glyph">{{symbol}}</span><span><strong>{{label}}</strong><small>{{subtitle}}</small></span><span class="hub-picked">✓</span></label>
+    {% endfor %}
+    </div>
+    <div class="hub-wizard-foot"><span class="hub-muted">You can change these later.</span><button class="hub-primary" type="button" data-next>Continue <span>→</span></button></div>
+   </div>
+   <div class="hub-step" data-step="1" hidden>
+    <h2>Got a character?</h2><p class="hub-muted">Completely optional. You can add one the first time you join a dungeon.</p>
+    <div class="hub-field"><label for="hub-character">Character name</label><input id="hub-character" name="character_name" autocomplete="off" maxlength="40" placeholder="Your character's name" value="{{pref.character_name}}"></div>
+    <div class="hub-field"><label for="hub-class">Class</label><select name="character_class" id="hub-class"><option value="">Choose a class</option>{% for cls in classes %}<option value="{{cls}}" {% if pref.character_class==cls %}selected{% endif %}>{{cls}}</option>{% endfor %}</select></div>
+    <div class="hub-wizard-foot"><button class="hub-secondary" type="button" data-back>← Back</button><div class="hub-wizard-actions"><button class="hub-secondary" type="button" id="hub-skip-character">Skip for now</button><button class="hub-primary" type="button" data-next>Continue →</button></div></div>
+   </div>
+   <div class="hub-step" data-step="2" hidden>
+    <h2>Ready to jump in?</h2><p class="hub-muted">Here's what we'll show you first. No more setup needed.</p>
+    <div class="hub-preview-selection"><strong>Your priorities</strong><div id="hub-picked-interests"></div><p id="hub-character-summary"></p></div>
+    <label class="hub-notify"><input type="checkbox" name="notify_opt_in" {% if pref.notify_opt_in %}checked{% endif %}><span><strong>I'd like relevant Discord alerts later</strong><small>Preference only: Discord DMs are not part of this test build.</small></span></label>
+    <div class="hub-wizard-foot"><button class="hub-secondary" type="button" data-back>← Back</button><button class="hub-primary" type="submit">{{'Save preferences' if editing else 'Enter Guild Hub'}} →</button></div>
+   </div>
+  </form>
+ </div>
+</section>
+<script src="{{url_for('static',filename='guild-hub.js',v='hub1')}}" defer></script>
+{% endblock %}

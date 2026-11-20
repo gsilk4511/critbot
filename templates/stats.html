@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block heading %}Members{% endblock %}
+{% block subheading %}See who’s showing up, hanging out, and building their collection.{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{{ url_for('static',filename='stats.css',v='012') }}">{% endblock %}
+{% block content %}
+<div class="stats-metrics">
+<div><span>Counted messages</span><strong>{{ '{:,}'.format(totals.messages) }}</strong></div>
+<div><span>Member voice hours</span><strong>{{ '{:,.1f}'.format(totals.voice_seconds/3600) }}</strong></div>
+<div><span>Member active days</span><strong>{{ '{:,}'.format(totals.days) }}</strong></div>
+<div><span>Achievement points</span><strong>{{ '{:,}'.format(totals.points) }}</strong></div>
+</div>
+<section class="compact-panel stats-chart-panel">
+<div class="compact-head"><div><h2>Guild activity comparison</h2><p>Cumulative totals for {{ roster|length }} synced members. Click any bar to inspect a member.</p></div><button class="stats-refresh" type="button" id="stats-refresh">Refresh stats ↻</button></div>
+<div class="stats-controls"><div><label for="stats-metric">Compare by</label><select id="stats-metric"><option value="messages">Counted messages</option><option value="voice_seconds">Voice minutes</option><option value="days">Active days</option><option value="points">Achievement points</option><option value="unlocks">Achievements unlocked</option></select></div><div><label for="stats-limit">Members shown</label><select id="stats-limit"><option value="15">Top 15</option><option value="30">Top 30</option><option value="all">All members</option></select></div><p id="chart-description" class="subtitle" aria-live="polite"></p></div>
+<div id="stats-chart" class="stats-chart" aria-label="Member activity comparison"></div>
+<p class="stats-note">Measured since tracking began, while Critbot was online. Voice totals sum each member’s earned time; active-day totals sum each member’s qualifying dates. No historical message trend is inferred.</p>
+</section>
+<div class="stats-detail-grid">
+<section class="compact-panel"><div class="compact-head"><div><h2>Server members</h2><p>Choose a member for their activity and achievements.</p></div></div><div class="panel-search"><input id="stats-search" type="search" placeholder="Find a member…" aria-label="Search server members"></div><div id="stats-roster" class="stats-roster"></div><div class="list-count" id="stats-roster-count"></div></section>
+<section class="compact-panel stats-profile-panel"><div id="stats-profile" aria-live="polite"><div class="stats-empty"><span>♜</span><h2>A closer look</h2><p>Click a member or a chart bar to see their activity totals and achievement progress.</p></div></div></section>
+</div>
+<script id="stats-data" type="application/json">{{ roster|tojson }}</script>
+<script src="{{ url_for('static',filename='stats.js',v='015') }}" defer></script>
+{% endblock %}

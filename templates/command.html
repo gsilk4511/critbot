@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block heading %}Guild Command Center{% endblock %}
+{% block subheading %}One place to run the guild. Achievements are one part of the operation.{% endblock %}
+{% block content %}
+<div class="ops-kpis">
+  <div class="ops-kpi"><small>Guild members</small><strong>{{ totals.members }}</strong><span>Synced from Discord</span></div>
+  <div class="ops-kpi"><small>Events</small><strong>{{ totals.upcoming }}</strong><span>Scheduled / active</span></div>
+  <div class="ops-kpi"><small>Open suggestions</small><strong>{{ totals.ideas }}</strong><span>Community feedback</span></div>
+  <div class="ops-kpi"><small>Achievement unlocks</small><strong>{{ totals.unlocks }}</strong><span>{{ totals.achievements }} achievements available</span></div>
+</div>
+<div class="ops-columns">
+ <section class="ops-panel"><div class="ops-panel-head"><div><h2>Upcoming guild events</h2><p>Calendar, signups, and Discord posts share the same event records.</p></div>{% if can_access('events') %}<a href="{{ url_for('events.home') }}">Open calendar →</a>{% endif %}</div>
+ {% if can_access('events') %}{% for e in events %}<a class="ops-line" href="{{ url_for('events.detail',event_id=e.id) }}"><span><strong>{{ e.title }}</strong><small>{{ e.local_time }}</small></span><em>{{ e.status }}</em></a>{% else %}<p class="ops-muted">No scheduled events yet.</p>{% endfor %}{% else %}<p class="ops-muted">Calendar access has not been assigned to your account.</p>{% endif %}
+ </section>
+ <section class="ops-panel"><div class="ops-panel-head"><div><h2>Community suggestions</h2><p>Organized review with member votes and Discord updates.</p></div>{% if can_access('suggestions') %}<a href="{{ url_for('suggestions.home') }}">Open ideas →</a>{% endif %}</div>
+ {% if can_access('suggestions') %}{% for i in suggestions %}<a class="ops-line" href="{{ url_for('suggestions.detail',sid=i.id) }}"><strong>{{ i.title }}</strong><em>{{ i.status }}</em></a>{% else %}<p class="ops-muted">No open ideas at the moment.</p>{% endfor %}{% else %}<p class="ops-muted">Suggestions access has not been assigned to your account.</p>{% endif %}
+ </section>
+</div>
+<div class="ops-action-grid">
+ {% if can_access('conduct') %}<a class="ops-action" href="{{ url_for('operations.home') }}"><span>⚖</span><strong>Conduct</strong><small>{{ conduct_count }} notes awaiting closure · Private officer log</small></a>{% endif %}
+ {% if can_access('treasury') %}<a class="ops-action" href="{{ url_for('operations.treasury_home') }}"><span>◈</span><strong>Treasury</strong><small>{{ treasury_count }} manual ledger entries · Guild funds</small></a>{% endif %}
+ {% if can_access('achievements') %}<a class="ops-action" href="{{ url_for('home') }}"><span>✦</span><strong>Achievements</strong><small>Manage member collections and rewards</small></a>{% endif %}
+ {% if can_access('stats') %}<a class="ops-action" href="{{ url_for('members_page') }}"><span>♟</span><strong>Members</strong><small>Activity, leaderboards, and progression</small></a>{% endif %}
+ {% if viewer.level in ('owner','pope') %}<a class="ops-action" href="{{ url_for('access_page') }}"><span>⚙</span><strong>Officer access</strong><small>People, permissions, and roles</small></a>{% endif %}
+</div>
+{% endblock %}

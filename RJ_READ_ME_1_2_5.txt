@@ -1,0 +1,1 @@
+CritBot 1.2.5 code-only hotfix. Apply over existing 1.2.4 source preserving paths; restart the dashboard service and hard refresh Chrome. Keep .env and data/critbot.db intact. Changes: officer involvement results filter/search/sort/paginate/export plus release notes. Do not deploy the local test archive.

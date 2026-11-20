@@ -1,0 +1,25 @@
+/* 1.2.4: isolated Guild Involvement layout; loaded after dashboard base CSS. */
+.ftc-main .ci-wrap{display:block!important;width:100%!important;max-width:1380px!important;min-width:0!important;margin:0 auto!important;color:#f1ddbf}
+.ftc-main .ci-wrap > .ci-heading{width:100%;margin:0 0 18px;padding:22px 27px;box-sizing:border-box}
+.ftc-main form.ci-wrap{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px!important;align-items:start!important;max-width:none!important;margin:0!important;padding:0!important;width:100%!important}
+.ftc-main form.ci-wrap>.ci-section{width:100%!important;min-width:0!important;margin:0!important;padding:21px 23px!important;align-content:start;align-self:stretch;box-sizing:border-box;overflow:visible}
+.ftc-main .ci-section-head{align-items:center;gap:12px;margin:0 0 2px;padding-bottom:13px}
+.ftc-main .ci-section-head h3{font-size:18px;line-height:1.3}
+.ftc-main .ci-section-head p{line-height:1.45}
+.ftc-main .ci-field-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px!important;width:100%;min-width:0}
+.ftc-main .ci-field{min-width:0!important;width:100%;display:flex!important;flex-direction:column!important;gap:9px;align-items:stretch!important}
+.ftc-main .ci-field-label{display:block!important;font-size:13px!important;line-height:1.4!important;margin:0!important}
+.ftc-main .ci-field-wide{grid-column:1 / -1}
+.ftc-main .ci-choices{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important;min-width:0!important;width:100%!important}
+.ftc-main .ci-choices .ci-choice{display:flex!important;flex-direction:row!important;justify-content:flex-start!important;align-items:center!important;gap:11px!important;min-width:0!important;width:100%!important;min-height:45px!important;height:auto!important;max-width:none!important;box-sizing:border-box!important;margin:0!important;padding:10px 13px!important;text-align:left!important;line-height:1.3!important;overflow-wrap:break-word;border-radius:9px}
+.ftc-main .ci-choice input[type=checkbox]{display:block!important;position:static!important;appearance:auto!important;opacity:1!important;visibility:visible!important;float:none!important;flex:0 0 17px!important;width:17px!important;min-width:17px!important;max-width:17px!important;height:17px!important;min-height:17px!important;max-height:17px!important;padding:0!important;margin:0!important;box-shadow:none!important;accent-color:#e1ac68!important}
+.ftc-main .ci-choice span{display:block!important;flex:1 1 auto!important;min-width:0!important;white-space:normal!important;font-size:13px!important;line-height:1.35!important}
+.ftc-main .ci-field input[type=text],.ftc-main .ci-field select,.ftc-main .ci-field textarea{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important;font-size:14px!important}
+.ftc-main .ci-field input[type=text],.ftc-main .ci-field select{min-height:45px!important}
+.ftc-main .ci-footer{grid-column:1/-1;width:100%;box-sizing:border-box;margin:0!important;display:flex!important;justify-content:space-between!important;align-items:center!important;gap:15px;padding:17px 22px}
+.ftc-main .ci-footer button{width:auto!important;white-space:nowrap}
+.ftc-main .ci-review{width:100%;max-width:1380px;margin-inline:auto}
+.ftc-main .ci-answers{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:1180px){.ftc-main form.ci-wrap{grid-template-columns:minmax(0,1fr)}.ftc-main .ci-choices{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(max-width:800px){.ftc-main .ci-choices{grid-template-columns:repeat(2,minmax(0,1fr))!important}.ftc-main .ci-field-grid{grid-template-columns:minmax(0,1fr)!important}.ftc-main .ci-footer{align-items:stretch!important;flex-direction:column!important}.ftc-main .ci-footer button{width:100%!important}}
+@media(max-width:460px){.ftc-main .ci-choices{grid-template-columns:1fr!important}.ftc-main form.ci-wrap>.ci-section{padding:15px!important}.ftc-main .ci-heading{padding:17px!important}.ftc-main .ci-answers{grid-template-columns:1fr}}

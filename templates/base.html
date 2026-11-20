@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#110c0a"><title>CritBot | Flick the Crit</title>
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css',v='1010') }}">
+<link rel="stylesheet" href="{{ url_for('static',filename='workspace.css',v='1010') }}">
+{% block extra_head %}{% endblock %}
+<link rel="stylesheet" href="{{ url_for('static',filename='ftc-command.css',v='1010') }}">
+<link rel="stylesheet" href="{{ url_for('static',filename='operations.css',v='1010') }}">
+<link rel="stylesheet" href="{{ url_for('static',filename='member-profiles.css',v='10101') }}">
+<link rel="stylesheet" href="{{url_for('static',filename='portrait-library.css',v='10102')}}">
+<link rel="stylesheet" href="{{ url_for('static',filename='v101.css',v='10101') }}">
+<link rel="stylesheet" href="{{url_for('static',filename='guild-shell.css',v='2')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='guild-desk.css',v='2')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='workstation4.css',v='5')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='revisionE.css',v='1')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='settingsF.css',v='1')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='wow-cursor.css',v='2')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='achievement-art.css',v='N1')}}">
+{% if request.endpoint in ('involvement.form','involvement.review') %}<link rel="stylesheet" href="{{url_for('static',filename='involvement-124.css',v='1241')}}">{% endif %}
+{% if request.endpoint=='involvement.review' %}<link rel="stylesheet" href="{{url_for('static',filename='involvement-125.css',v='125')}}">{% endif %}
+
+</head><body class="{{'ftc-hub-view' if request.endpoint=='hub.home' else ''}} {{'ftc-workstation-page' if request.endpoint in ('hub.settings','requests.board','events.home','groups.home','members_page','member_profile_studio','social.inbox') else ''}} {{'ftc-profile-editor' if request.endpoint=='member_profile_studio' else ''}} cw-theme-{{member_settings.theme if member_settings is defined else 'ember'}} cw-density-{{member_settings.density if member_settings is defined else 'comfortable'}} cw-layout-{{member_settings.hub_layout if member_settings is defined else 'balanced'}} {{'cw-rail-pref' if member_settings is defined and member_settings.compact_sidebar else ''}}">
+{% set ep=request.endpoint or '' %}
+{% set is_events=ep.startswith('events.') %}
+{% set is_suggestions=ep.startswith('suggestions.') %}
+{% set is_access=ep in ('access_page','access_save','access_remove') %}
+{% set is_competitions=ep.startswith('product.') %}
+{% set is_conduct=ep.startswith('operations.home') or ep in ('operations.create','operations.update') %}
+{% set is_treasury=ep in ('operations.treasury_home','operations.record') %}
+{% set is_achievements=ep in ('home','new','edit','award','revoke','bulk','bulk_submit','member_action','member_state','member_actions','cards_page','card_preview','automatic_page','delete_achievement','achievement_catalog','add_catalog_achievement') %}
+{% set is_feedback=ep.startswith('feedback.') %}
+{% set is_channels=ep.startswith('channels.') %}
+{% set is_members=ep in ('members_page','member_profile','member_profile_studio','member_appearance_save','member_self_save','member_staff_save','member_welcome_save','stats_page','stats_member','leaderboards_page') %}
+<div class="ftc-shell" id="ftc-shell">
+ <div class="ftc-sidebar-scrim" id="ftc-sidebar-scrim" aria-hidden="true"></div>
+ <aside class="ftc-rail" id="ftc-sidebar" aria-label="CritBot navigation">
+  <div class="ftc-rail-brand"><a href="{{url_for('hub.home')}}" class="ftc-rail-mark" title="Flick the Crit Guild Hub"><img src="{{url_for('static',filename='ftc-mark.png')}}" alt=""></a><a class="ftc-rail-brand-text" href="{{url_for('hub.home')}}"><strong>FLICK THE CRIT</strong><small>CRITBOT COMMAND</small></a></div>
+  <nav class="ftc-rail-links" aria-label="Main sections">
+   <div class="ftc-rail-caption">GUILD</div>
+   <a class="ftc-rail-link {{'is-active' if ep.startswith('hub.') and ep!='hub.welcome'}}" href="{{url_for('hub.home')}}" title="Guild Hub"><span class="ftc-rail-symbol">⌂</span><span class="ftc-rail-label">Guild Hub</span></a>
+   <a class="ftc-rail-link {{'is-active' if ep.startswith('groups.')}}" href="{{url_for('groups.home')}}" title="Find Groups"><span class="ftc-rail-symbol">⚔</span><span class="ftc-rail-label">Find Groups</span></a><a class="ftc-rail-link {{'is-active' if is_events}}" href="{{url_for('events.home')}}" title="Guild Events"><span class="ftc-rail-symbol">▦</span><span class="ftc-rail-label">Guild Events</span></a>
+   <a class="ftc-rail-link {{'is-active' if ep.startswith('requests.')}}" href="{{url_for('requests.board')}}" title="Request Board"><span class="ftc-rail-symbol">⚒</span><span class="ftc-rail-label">Request Board</span></a>
+   <a class="ftc-rail-link {{'is-active' if is_members}}" href="{{url_for('members_page')}}" title="Members"><span class="ftc-rail-symbol">♙</span><span class="ftc-rail-label">Members</span></a>
+   <a class="ftc-rail-link {{'is-active' if request.endpoint=='social.inbox'}}" href="{{url_for('social.inbox')}}" title="Notifications"><span class="ftc-rail-symbol">◉</span><span class="ftc-rail-label">Notifications</span>{% if hub_unread %}<span class="ftc-rail-count">{{hub_unread if hub_unread<100 else '99+'}}</span>{% endif %}</a>
+   <div class="ftc-rail-caption">YOUR GUILD</div>
+   <a class="ftc-rail-link {{'is-active' if ep=='involvement.form'}}" href="{{url_for('involvement.form')}}" title="Guild Involvement"><span class="ftc-rail-symbol">✎</span><span class="ftc-rail-label">Guild Involvement</span></a>
+   <a class="ftc-rail-link" href="{{url_for('characters.home')}}" title="Main & alts"><span class="ftc-rail-symbol">♜</span><span class="ftc-rail-label">Main & alts</span></a>
+   <a class="ftc-rail-link" href="{{url_for('member_profile',member_id=viewer.discord_id)}}" title="My profile & awards"><span class="ftc-rail-symbol">✦</span><span class="ftc-rail-label">My profile & awards</span></a>
+   <a class="ftc-rail-link {{'is-active' if is_feedback}}" href="{{url_for('feedback.home')}}" title="Feedback"><span class="ftc-rail-symbol">✉</span><span class="ftc-rail-label">Feedback</span></a>
+   <a class="ftc-rail-link {{'is-active' if is_suggestions}}" href="{{url_for('suggestions.home')}}" title="Suggestions"><span class="ftc-rail-symbol">◇</span><span class="ftc-rail-label">Suggestions</span></a>
+   {% if viewer.level!='member' %}
+   <div class="ftc-rail-caption">LEADERSHIP</div>
+   <details class="ftc-rail-group" {{'open' if is_achievements or is_channels or is_conduct or is_treasury or is_access or ep=='command_center' else ''}}><summary class="ftc-rail-link" title="Officer tools"><span class="ftc-rail-symbol">♛</span><span class="ftc-rail-label">Officer tools</span><span class="ftc-rail-fold">⌄</span></summary><div class="ftc-rail-sub">
+     <a href="{{url_for('command_center')}}">Command Center</a>
+     {% if can_access('achievements') %}<a href="{{url_for('home')}}">Achievements</a>{% endif %}
+     {% if can_access('involvement_view') %}<a href="{{url_for('involvement.review')}}">Involvement responses</a>{% endif %}
+     {% if can_access('treasury') %}<a href="{{url_for('operations.treasury_home')}}">Treasury</a>{% endif %}
+     {% if can_access('conduct') %}<a href="{{url_for('operations.home')}}">Conduct</a>{% endif %}
+     {% if can_access('automation') or can_access('suggestions_board') or can_access('events_manage') %}<a href="{{url_for('channels.home')}}">Channel control</a>{% endif %}
+     {% if can_access('competitions') or can_access('exports') or can_access('branding') %}<a href="{{url_for('product.tools')}}">Activities & reports</a>{% endif %}
+     {% if viewer.level in ('owner','pope') %}<a href="{{url_for('access_page')}}">Access management</a>{% endif %}
+   </div></details>
+   {% endif %}
+  </nav>
+  <div class="ftc-rail-bottom"><a class="ftc-rail-link" href="{{url_for('hub.settings')}}" title="Dashboard settings"><span class="ftc-rail-symbol">⚙</span><span class="ftc-rail-label">Settings</span></a><details class="ftc-rail-user"><summary title="Account menu"><span class="ftc-user-dot">{{(viewer.display_name or 'G')[:1]|upper}}</span><span class="ftc-rail-user-name"><strong>{{viewer.display_name or 'Guild Member'}}</strong><small>{{'Officer' if viewer.level!='member' else 'Guild member'}}</small></span><span class="ftc-rail-fold">⌄</span></summary><div class="ftc-rail-user-menu"><a href="{{url_for('hub.settings')}}">Dashboard settings</a><a href="{{url_for('member_profile',member_id=viewer.discord_id)}}">My profile</a><a href="{{url_for('characters.home')}}">My characters</a><form method="post" action="{{url_for('logout')}}"><button type="submit">Sign out</button></form></div></details><a class="cw-version-chip" href="{{url_for('about_version')}}" title="Version history & release notes">CritBot <strong>{{critbot_version}}</strong> <span>History ↗</span></a></div>
+ </aside>
+ <div class="ftc-workspace">
+  <header class="ftc-workspace-bar"><div class="ftc-workspace-left"><button type="button" id="ftc-menu-toggle" class="ftc-icon-button" aria-label="Collapse or expand navigation" aria-controls="ftc-sidebar" aria-expanded="true">☰</button><div class="ftc-location"><span>FLICK THE CRIT</span><strong>{{'Guild Hub' if ep=='hub.home' else 'CritBot'}}</strong></div></div><div class="ftc-workspace-tools">{% if dev_preview %}<span class="ftc-dev-pill">LOCAL DEV</span>{% endif %}<details class="ftc-bell"><summary aria-label="Notifications" title="Notifications">♧{% if hub_unread %}<span class="ftc-notice-count">{{hub_unread if hub_unread<100 else '99+'}}</span>{% endif %}</summary><div class="ftc-bell-menu"><div class="ftc-bell-head"><strong>Notifications</strong><a href="{{url_for('social.inbox')}}">Open inbox →</a></div>{% for n in hub_notice_preview %}<form method="post" action="{{url_for('social.mark_one',notice_id=n.id)}}"><button class="ftc-bell-item {{'unread' if not n.read_at else ''}}"><strong>{{n.title}}</strong><small>{{n.message}}</small></button></form>{% else %}<p class="ftc-bell-empty">No updates yet. You're all caught up.</p>{% endfor %}</div></details><a href="{{url_for('member_profile',member_id=viewer.discord_id)}}" class="ftc-workspace-avatar" title="My profile">{{(viewer.display_name or 'G')[:1]|upper}}</a></div></header>
+<main class="ftc-main {{'ftc-main-hub' if ep=='hub.home' else ''}}"><div class="ftc-main-inner">{% if dev_preview %}<div class="ftc-dev-banner" style="background:#32221d;border:1px solid #bc8752;color:#f4d5aa;padding:9px 14px;border-radius:7px;font-size:12px;margin-bottom:16px;letter-spacing:.3px"><strong>LOCAL DEV PREVIEW</strong> · Fake accounts and demo events · Nothing connects to your live CritBot or Discord server.</div>{% endif %}
+ {% if ep!='hub.home' %}<div class="ftc-section-caption"><span class="ftc-section-line"></span> FLICK THE CRIT <span class="ftc-section-slash">/</span> GUILD MANAGEMENT</div>
+ <header class="page-header"><div class="ftc-heading-mark"></div><div><h1>{% block heading %}Guild Command Center{% endblock %}</h1><p class="subtitle">{% block subheading %}Your guild. Your command center.{% endblock %}</p></div></header>
+ {% endif %}
+ {% if is_events and ep!='events.home' %}
+ {# Editing an event is a focused form; no secondary tab maze. #}
+ {% elif is_feedback %}
+ <nav class="workspace-tabs" aria-label="Feedback sections"><a class="{{'active' if ep=='feedback.home'}}" href="{{url_for('feedback.home')}}">Send feedback</a>{% if can_access('feedback_manage') %}<a class="{{'active' if ep=='feedback.review'}}" href="{{url_for('feedback.review')}}">Officer inbox</a>{% endif %}</nav>
+ {% elif is_suggestions %}
+ <nav class="workspace-tabs" aria-label="Suggestion sections"><a href="{{url_for('suggestions.home')}}">Idea inbox</a><a href="{{url_for('suggestions.home',status='open',sort='top')}}">Top open ideas</a><a href="{{url_for('suggestions.home',status='planned')}}">Planned</a></nav>
+ {% elif is_competitions %}
+ <nav class="workspace-tabs" aria-label="Activities and reports"><a class="{{'active' if ep=='product.tools'}}" href="{{url_for('product.tools')}}">Overview</a>{% if can_access('competitions') %}<a class="{{'active' if ep=='product.seasons'}}" href="{{url_for('product.seasons')}}">Activity challenges</a>{% endif %}{% if can_access('branding') %}<a class="{{'active' if ep=='product.brand'}}" href="{{url_for('product.brand')}}">Achievement card appearance</a>{% endif %}{% if can_access('exports') %}<a class="{{'active' if ep=='product.export'}}" href="{{url_for('product.export')}}">Download member stats</a>{% endif %}</nav>
+ {% elif is_members and ep not in ('members_page','member_profile_studio') %}
+ <nav class="workspace-tabs"><a href="{{url_for('members_page')}}">Member directory</a>{% if can_access('stats') %}<a href="{{url_for('stats_page')}}">Activity insights</a><a href="{{url_for('leaderboards_page')}}">Leaderboards</a>{% endif %}</nav>
+ {% elif is_achievements %}
+ <nav class="workspace-tabs" aria-label="Achievements sections">{% if can_access('achievements') %}<a class="{{'active' if ep=='home'}}" href="{{url_for('home')}}">Collections</a>{% endif %}{% if can_access('bulk_awards') %}<a href="{{url_for('bulk')}}">Bulk awards</a>{% endif %}{% if can_access('achievement_editor') %}<a href="{{url_for('new')}}">Create achievement</a><a class="{{'active' if ep=='achievement_catalog'}}" href="{{url_for('achievement_catalog')}}">Guild achievement library</a>{% endif %}{% if can_access('automation') %}<a href="{{url_for('automatic_page')}}">Activity rewards</a>{% endif %}{% if can_access('achievements') %}<a href="{{url_for('cards_page')}}">Card previews</a>{% endif %}</nav>
+ {% endif %}
+ {% with messages=get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
+ {% block content %}{% endblock %}
+ <footer class="ftc-footer"><span>FLICK THE CRIT · CRITBOT</span><a href="{{url_for('about_version')}}">CritBot {{critbot_version}} · Previous versions ↗</a></footer>
+</div></main></div></div>
+<script src="{{url_for('static',filename='guild-shell.js',v='2')}}" defer></script>
+{% if hosted_mode %}<script>(()=>{const token={{ csrf_token|tojson }};for(const form of document.querySelectorAll('form'))if((form.method||'get').toLowerCase()==='post'){const input=document.createElement('input');input.type='hidden';input.name='_csrf';input.value=token;form.append(input);}const original=window.fetch;window.fetch=(input,options={})=>{const method=(options.method||'GET').toUpperCase();const target=new URL(typeof input==='string'?input:input.url,location.href);if(target.origin===location.origin&&!['GET','HEAD','OPTIONS'].includes(method)){const headers=new Headers(options.headers||{});headers.set('X-CSRF-Token',token);options={...options,headers};}return original(input,options);};})();</script>{% endif %}
+</body></html>

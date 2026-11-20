@@ -1,0 +1,8 @@
+.env
+.git
+__pycache__/
+*.pyc
+.cloudflared-token
+cloudflared
+cloudflared.download
+data/

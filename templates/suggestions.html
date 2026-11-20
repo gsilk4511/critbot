@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block heading %}Guild Suggestions{% endblock %}
+{% block subheading %}One idea inbox, shared between Discord and the dashboard. Members can submit and vote in either place.{% endblock %}
+{% block content %}
+<div class="ops-kpis"><div class="ops-kpi"><small>Total ideas</small><strong>{{items|length}}</strong><span>Current filter</span></div><div class="ops-kpi"><small>Needs review</small><strong>{{counts.open}}</strong><span>Open for community input</span></div><div class="ops-kpi"><small>Planned</small><strong>{{counts.planned}}</strong><span>Accepted for consideration</span></div><div class="ops-kpi"><small>Completed</small><strong>{{counts.completed}}</strong><span>Implemented</span></div></div>
+<section class="ops-panel"><div class="ops-panel-head"><div><h2>Submit an idea</h2><p>Discord login identifies the author. The same idea is posted to Discord and appears here for review.</p></div></div>
+{% if board.state=='posted' %}
+<form method="post" action="{{url_for('suggestions.create')}}" class="ops-form">
+<label>Idea title<input name="title" maxlength="80" required placeholder="Example: Friday night PvP event"></label>
+<label>What should we do, and why?<textarea name="body" maxlength="1500" rows="3" required placeholder="Explain your idea so people can discuss it and vote."></textarea></label>
+<button class="btn">Submit idea to dashboard and Discord</button></form>
+{% else %}<p class="ops-muted">Ideas open when the Discord suggestion board is active. {% if can_board %}Publish it below.{% else %}Ask a guild officer to publish the board.{% endif %}</p>{% endif %}
+</section>
+<section class="ops-panel suggestion-routing-panel">
+<div class="ops-panel-head"><div><h2>Discord suggestion channels</h2><p><a href="{{url_for('channels.home')}}">Refresh Discord channel directory →</a></p>
+<p>Keep the submission button easy to find. Publish members' ideas in a separate discussion channel so the button never gets buried.</p></div>
+{% if board.message_id %}<a href="https://discord.com/channels/{{board.guild_id}}/{{board.channel_id}}/{{board.message_id}}" target="_blank" rel="noopener">Open Submit Idea button ↗</a>{% endif %}</div>
+{% if can_board %}
+<form method="post" action="{{url_for('suggestions.board')}}" class="ops-form" data-review="Save these channels? Moving the button retires the old button. Changing the suggestion feed affects NEW posts only; existing ideas and votes are preserved.">
+<div class="ops-fields">
+<label><strong>1 · Submission Channel</strong><small>Where the permanent Submit Idea button lives</small>
+<select name="channel_id"><option value="">Choose a channel…</option>{% for c in channels %}<option value="{{c.channel_id}}" {% if board.channel_id==c.channel_id %}selected{% endif %}>#{{c.name}}</option>{% endfor %}</select><small>Or paste a channel ID if the list is stale</small><input name="channel_id_manual" inputmode="numeric" pattern="[0-9]{17,22}" placeholder="Manual channel ID (optional)"></label>
+<label><strong>2 · Suggestion Feed</strong><small>Where new suggestions, votes and staff decisions are posted</small>
+<select name="results_channel_id"><option value="">Choose a different channel…</option>{% for c in channels %}<option value="{{c.channel_id}}" {% if board.results_channel_id==c.channel_id %}selected{% endif %}>#{{c.name}}</option>{% endfor %}</select><small>Or paste a channel ID if the list is stale</small><input name="results_channel_id_manual" inputmode="numeric" pattern="[0-9]{17,22}" placeholder="Manual channel ID (optional)"></label>
+</div>
+<p class="ops-muted">Example: <strong>#suggest-an-idea</strong> holds the button; <strong>#guild-suggestions</strong> receives each idea as a separate post. Select two different channels.</p>
+<button class="btn" {% if board.state in ['queued','posting'] %}disabled{% endif %}>{{'Save Discord suggestion channels' if board.message_id else 'Publish suggestion button & set feed'}}</button>
+</form>
+{% else %}
+<p class="ops-muted">Button: <strong>{{channel_names.get(board.channel_id,('ID '+board.channel_id if board.channel_id else 'Not configured'))}}</strong> · Feed: <strong>{{channel_names.get(board.results_channel_id,('ID '+board.results_channel_id if board.results_channel_id else 'Not configured'))}}</strong>. An officer with the Publish Suggestion Board permission can change these.</p>
+{% endif %}
+{% if board.channel_id and board.channel_id==board.results_channel_id %}<p class="ops-muted" role="status"><strong>Setup needed:</strong> Your current channels are the same. Choose a separate Suggestion Feed to prevent new ideas from burying the submission button.</p>{% endif %}
+<p class="ops-muted">Button status: {{board.state|title}}{% if board.last_error %} · {{board.last_error}}{% endif %}{% if not channels %} · No channels synced yet; check bot startup and Discord permissions.{% endif %}</p>
+<p class="ops-muted">Changing the feed only affects newly submitted suggestions. Existing Discord posts remain in their original channels with their votes and staff responses.</p>
+</section>
+<section class="ops-panel"><div class="ops-panel-head"><div><h2>Suggestion inbox</h2><p>Vote, review, archive, or remove ideas. Archiving hides an idea without losing its history; permanent deletion is separately restricted.</p></div><form method="get" class="ops-toolbar"><select name="status">{% for k in (['all','open','planned','completed','declined','archived'] if (can_archive or can_delete) else ['all','open','planned','completed','declined']) %}<option value="{{k}}" {% if status==k %}selected{% endif %}>{{k|title}}</option>{% endfor %}</select><select name="sort"><option value="newest" {% if sort=='newest' %}selected{% endif %}>Newest</option><option value="top" {% if sort=='top' %}selected{% endif %}>Most supported</option></select><button class="picker-secondary">Filter</button></form></div>
+{% if can_archive or can_delete %}<p class="ops-muted">{{archived_count}} archived idea{{'' if archived_count==1 else 's'}} · Use the status filter to review them. Archive preserves a suggestion; delete removes it and its Discord post after confirmation.</p>{% endif %}
+{% for i in items %}<a class="ops-line" href="{{url_for('suggestions.detail',sid=i.id)}}"><span><strong>{{i.title}}</strong><small>#{{i.id}} · {{i.author_name}} · {{i.category}} · {{i.priority|title}} priority{% if i.assigned_to %} · Assigned: {{i.assigned_to}}{% endif %}</small></span><span class="ops-vote"><strong>{{'%+d'|format(i.score)}}</strong><small>{{'Archived' if i.archived else i.status|title}}{% if i.delete_state %} · Deletion {{i.delete_state}}{% else %} · Discord: {{i.publish_state|title}}{% endif %}</small></span></a>{% else %}<p class="ops-muted">No ideas here yet. Submit the first one above.</p>{% endfor %}
+</section>
+{% include 'suggestion_review.html' %}{% endblock %}

@@ -1,0 +1,530 @@
+{
+  "current": {
+    "version": "1.2.6",
+    "title": "Involvement Stability & Release History Redesign",
+    "build": "1.2.6",
+    "date": "2026-11-13",
+    "sections": [
+      {
+        "title": "Hotfix 1.2.6",
+        "items": [
+          "Handle missing questionnaire tables safely after incomplete deployments without replacing existing answers.",
+          "Read older or malformed saved answer rows without crashing member pages.",
+          "Fix review queue sorting for ISO-formatted and missing timestamps; preserve current filters and export.",
+          "Replace nested scrolling release notes with a wide, single-page timeline.",
+          "Keep 1.0, 1.1, and 1.2 release families and individual hotfix details.",
+          "Move manual release-note editing into a collapsed leadership-only section."
+        ]
+      },
+      {
+        "title": "Hotfix 1.2.5",
+        "items": [
+          "Redesign officer questionnaire results into a compact, expandable review queue.",
+          "Add search by Discord/preferred/main name, status and reviewer filters, interest filters, and sort modes.",
+          "Add paginated results, status totals and permission-protected filtered CSV export.",
+          "Keep the current filters after an officer saves a response; no database migration required."
+        ]
+      },
+      {
+        "title": "Hotfix 1.2.4",
+        "items": [
+          "Fix Guild Involvement checkbox sizing, text labels and full-width desktop layout.",
+          "Arrange questionnaire sections in readable two-column desktop cards with responsive mobile controls.",
+          "Expand version history to full available width; remove the nested fixed-height scroll area, enlarge release cards."
+        ]
+      },
+      {
+        "title": "Hotfix 1.2.3",
+        "items": [
+          "Version History groups updates under their main 1.0, 1.1, and 1.2 release tabs, with individually expandable verified hotfix entries.",
+          "Guild Involvement questionnaire reorganized into four clearly labeled sections with compact option cards, saved answers and concise officer review cards.",
+          "Existing private answers, reviewer permissions and review workflows preserved."
+        ]
+      },
+      {
+        "title": "Hotfix 1.2.2",
+        "items": [
+          "Group creators and authorized officers may add/remove members and delete groups.",
+          "Fix officer rank assignment permissions on member profiles.",
+          "Member characters can select multiple class-compatible roles; a separate officer capability controls editing other members.",
+          "Involvement questionnaire adds main/preferred names, multiple-choice and checkbox answers, plus confidential officer review."
+        ]
+      },
+      {
+        "title": "Groups & Discord",
+        "items": [
+          "Cleaner role-by-role dungeon recruitment embed with visible open slots",
+          "Group leaders can remove roster members from dashboard",
+          "Improved group member management for leveling and questing"
+        ]
+      },
+      {
+        "title": "Guild Treasury",
+        "items": [
+          "Gold, silver and copper entered separately and stored in exact copper",
+          "Choose guild depositor or recipient from synced Discord roster",
+          "CSV export of full immutable ledger"
+        ]
+      },
+      {
+        "title": "Guild Involvement",
+        "items": [
+          "Private member questionnaire and saved responses",
+          "Dedicated officer view and handle access permissions",
+          "Officer assignment, status tracking, and private follow-up notes"
+        ]
+      },
+      {
+        "title": "Member sign-in",
+        "items": [
+          "Optional 30-day remembered browser session after Discord verification"
+        ]
+      },
+      {
+        "title": "Release management",
+        "items": [
+          "Manual owner/Pope release label and changelog editor with audit history"
+        ]
+      }
+    ]
+  },
+  "baseline": {
+    "version": "1.01",
+    "title": "Guild Workstation & Achievement Library",
+    "date": "2026-11-08",
+    "status": "Release candidate — RJ deployment handoff",
+    "build": "1.01-rc1",
+    "sections": [
+      {
+        "title": "Guild Hub & navigation",
+        "items": [
+          "Personalized first-visit onboarding with interest selection; character creation is optional.",
+          "Second-monitor Guild Hub prioritizes useful actions, commitments, recommended groups, notices, and achievement progress.",
+          "Quick create/request/join actions open from the Hub; full feature pages remain available.",
+          "Discord-style expandable sidebar replaces crowded top navigation; officer tools are grouped separately.",
+          "Screen-conscious Hub and focused page panels; large lists paginate or scroll inside the relevant panel instead of cutting off controls."
+        ]
+      },
+      {
+        "title": "Groups, dungeons & scheduled events",
+        "items": [
+          "Separate Find Groups from Guild Events. Immediate Dungeon, Leveling, and Questing groups are not calendar events.",
+          "Dungeon group finder uses five slots (one tank, one healer, three DPS), with class/role validation and saved-character selection.",
+          "Leveling groups specify zone and level range; questing groups specify location and an optional quest.",
+          "Create and join recruiting groups through the Hub or the full Group Finder.",
+          "Scheduled raids, guild events, and custom activities stay under Guild Events, with calendar and RSVPs.",
+          "Discord group recruitment and scheduled-event synchronization use their appropriate workflows; dashboard-only group types do not falsely promise Discord posts."
+        ]
+      },
+      {
+        "title": "Request Board & game catalogs",
+        "items": [
+          "Different request forms for Quest Help, Crafting Orders, Materials, and Other Help—questing never requests guild-bank reagents.",
+          "End-to-end request handling: post, claim, provide available supplies, mark delivered, requester confirms; statuses and audit checks prevent impersonation.",
+          "Requests can be assigned to a member’s registered main or alt; service credit only after confirmed completion.",
+          "Searchable three-panel Request Studio with catalog filters, server-side pagination, and quick access from the Guild Hub.",
+          "Bundled ForeverGuide-derived catalog: 2,033 Horde or potentially neutral quests, 2,495 profession recipes, and 591 distinct crafting materials. Live-game completeness is not certified.",
+          "Quest and recipe records preserve available source IDs, NPCs, zones, requirements, skill levels, ingredient IDs, and quantities.",
+          "WoW-style item tooltips with quality colors, descriptions and reagent hovers where verified item metadata exists.",
+          "Item icon lookup favors verified artwork and falls back to 23 item-type illustrations rather than displaying widespread question marks.",
+          "Bundled silver gauntlet cursor based on the supplied reference; ordinary text-selection cursor remains in inputs."
+        ]
+      },
+      {
+        "title": "Characters, profiles & member directory",
+        "items": [
+          "One Discord-linked member can register a main and multiple alts, including class, roles, level and professions where provided.",
+          "Revamped searchable member directory with personalized portraits, profile previews, and member activity indicators.",
+          "Profile Studio with immediate live preview, curated fantasy portraits, emblems, scenery, themes, layouts, banners and achievement showcase.",
+          "Portrait tiles keep a proper aspect ratio; editor sections expand independently with their own scrolling when necessary.",
+          "Profile trophy badges are larger and easier to read; users can customize which earned badges to display.",
+          "Authorized officers assign an official displayed guild rank; members select presentation style but cannot promote themselves.",
+          "Member commendations highlight traits such as Helpful, Welcoming, Patient, Reliable, Leadership, and Fun to Play With."
+        ]
+      },
+      {
+        "title": "Achievement library & recognition",
+        "items": [
+          "48 currently active guild achievements: 30 exact Dungeon Ledger guild-achievement definitions plus 18 original CritBot service/crafting/community awards.",
+          "All 48 corresponding icons are bundled locally and appear in the catalog, award manager, member trophies, profile editor, and Discord card artwork.",
+          "Achievement names, descriptions, categories, point values, rarity, and artwork are linked to their catalog records.",
+          "Pre-1.01 achievements are archived rather than deleted; prior unlocks, reward role IDs, and historical awards are preserved.",
+          "Old achievement auto-rules are disabled when their catalog entries are archived; new award verification remains officer-controlled.",
+          "Rarity-specific achievement card art and optional original portrait/emblem assets remain available."
+        ]
+      },
+      {
+        "title": "Social, notifications & member preferences",
+        "items": [
+          "In-dashboard notification inbox and compact bell preview cover relevant requests, groups, events, and member commendations.",
+          "Members set activity interests, dashboard theme, information density, Hub priorities, sidebar style, and notice categories.",
+          "Settings shows focused Appearance, My Activities, and Notifications panels with immediate preview instead of a wall of controls.",
+          "Important personal actions are surfaced on the member’s Hub without sending unnecessary Discord pings."
+        ]
+      },
+      {
+        "title": "Officer governance, feedback & operational tools",
+        "items": [
+          "Granular dashboard permissions, quick-start access presets, Welcome Team notes distinct from restricted officer notes.",
+          "Corrected route-permission mapping for Find Groups so authorized users, including the guild owner, can enter.",
+          "Officer tools retain the command view, conduct records, member follow-ups, treasury ledger, and activity reporting.",
+          "Private feedback can be submitted for Bot, Discord, or Guild; officers review and triage it inside the Feedback area.",
+          "Suggestions retain dashboard/Discord submission, voting, management, and separate submission/feed channel configuration.",
+          "Channel-control refresh and manual Discord channel-ID overrides help with newly created or missing channels.",
+          "Event management, achievement awarding, profile rank changes, and member access respect the existing permission and audit rules."
+        ]
+      },
+      {
+        "title": "Reliability, packaging & boundaries",
+        "items": [
+          "Request Studio initialization-order freeze fixed; search and category controls attach correctly.",
+          "Catalog imports and achievement migrations are idempotent and avoid replacing member data or duplicating records.",
+          "The dashboard and bot share a single canonical release number and complete version-history view.",
+          "Retired experimental integrations are not included; this release contains the Discord bot and dashboard only.",
+          "Release packages omit production database, credentials, and demo fixtures; they preserve existing environment/proxy/Docker settings."
+        ]
+      }
+    ]
+  },
+  "milestones": [
+    {
+      "id": "Rev N",
+      "title": "Achievement library",
+      "description": "48 active achievements: 30 exact guild awards plus 18 original CritBot achievements; icon packs and legacy award preservation."
+    },
+    {
+      "id": "Rev M",
+      "title": "Dashboard-only cleanup",
+      "description": "Silver-gauntlet cursor, clearer item icons, addon integration removed from CritBot release."
+    },
+    {
+      "id": "Rev L",
+      "title": "WoW-style items",
+      "description": "Item hover cards, rarity/description/ingredient detail, local icon support."
+    },
+    {
+      "id": "Rev J",
+      "title": "Request Studio repair",
+      "description": "Fixed UI initialization crash that left the request picker loading indefinitely."
+    },
+    {
+      "id": "Rev H",
+      "title": "ForeverGuide catalog",
+      "description": "Horde/potentially neutral quests and profession recipe data imported with stable IDs."
+    },
+    {
+      "id": "Rev G",
+      "title": "Searchable request picker",
+      "description": "Three-panel catalog, server-side pagination, material selection and search from Hub."
+    },
+    {
+      "id": "Rev F",
+      "title": "Access and settings",
+      "description": "Group-route authorization correction, focused member settings, connection experiments later retired."
+    },
+    {
+      "id": "Rev E",
+      "title": "Groups and member ranks",
+      "description": "Dungeon/leveling/questing finder, separate scheduled events, rank assignment, larger badges and portrait fixes."
+    },
+    {
+      "id": "Rev D",
+      "title": "Working member Hub",
+      "description": "In-place quick actions, quest-help separation, scrolling fixes, live profile studio."
+    },
+    {
+      "id": "Rev C",
+      "title": "Guild workstation",
+      "description": "Compact second-monitor Hub, collapsible sidebar, in-dashboard notices and commendations."
+    },
+    {
+      "id": "Rev B",
+      "title": "Request Board and alts",
+      "description": "Create/claim/deliver/confirm orders and multiple character management."
+    },
+    {
+      "id": "Rev A",
+      "title": "Personalized Hub preview",
+      "description": "New-member onboarding, interests, optional character entry, suggested groups and activities."
+    },
+    {
+      "id": "Previews",
+      "title": "1.01 foundation",
+      "description": "Channel control, feedback, member portraits, profile refinements, event and achievement design."
+    }
+  ],
+  "release_groups": [
+    {
+      "version": "1.0",
+      "title": "CritBot launch",
+      "description": "Original achievement and member dashboard release.",
+      "releases": [
+        {
+          "version": "1.0",
+          "title": "Launch foundation",
+          "date": "2026-11",
+          "sections": [
+            {
+              "title": "Core functionality",
+              "items": [
+                "Achievement awards and member profiles",
+                "Discord-linked guild management dashboard",
+                "Officer access controls and bot integrations"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "1.1",
+      "title": "Guild workstation evolution",
+      "description": "The project source labels the major workstation build 1.01; that archived identifier is preserved below.",
+      "releases": [
+        {
+          "version": "1.01",
+          "title": "Guild Workstation & Achievement Library",
+          "date": "2026-11-08",
+          "sections": [
+            {
+              "title": "Guild Hub & navigation",
+              "items": [
+                "Personalized first-visit onboarding with interest selection; character creation is optional.",
+                "Second-monitor Guild Hub prioritizes useful actions, commitments, recommended groups, notices, and achievement progress.",
+                "Quick create/request/join actions open from the Hub; full feature pages remain available.",
+                "Discord-style expandable sidebar replaces crowded top navigation; officer tools are grouped separately.",
+                "Screen-conscious Hub and focused page panels; large lists paginate or scroll inside the relevant panel instead of cutting off controls."
+              ]
+            },
+            {
+              "title": "Groups, dungeons & scheduled events",
+              "items": [
+                "Separate Find Groups from Guild Events. Immediate Dungeon, Leveling, and Questing groups are not calendar events.",
+                "Dungeon group finder uses five slots (one tank, one healer, three DPS), with class/role validation and saved-character selection.",
+                "Leveling groups specify zone and level range; questing groups specify location and an optional quest.",
+                "Create and join recruiting groups through the Hub or the full Group Finder.",
+                "Scheduled raids, guild events, and custom activities stay under Guild Events, with calendar and RSVPs.",
+                "Discord group recruitment and scheduled-event synchronization use their appropriate workflows; dashboard-only group types do not falsely promise Discord posts."
+              ]
+            },
+            {
+              "title": "Request Board & game catalogs",
+              "items": [
+                "Different request forms for Quest Help, Crafting Orders, Materials, and Other Help—questing never requests guild-bank reagents.",
+                "End-to-end request handling: post, claim, provide available supplies, mark delivered, requester confirms; statuses and audit checks prevent impersonation.",
+                "Requests can be assigned to a member’s registered main or alt; service credit only after confirmed completion.",
+                "Searchable three-panel Request Studio with catalog filters, server-side pagination, and quick access from the Guild Hub.",
+                "Bundled ForeverGuide-derived catalog: 2,033 Horde or potentially neutral quests, 2,495 profession recipes, and 591 distinct crafting materials. Live-game completeness is not certified.",
+                "Quest and recipe records preserve available source IDs, NPCs, zones, requirements, skill levels, ingredient IDs, and quantities.",
+                "WoW-style item tooltips with quality colors, descriptions and reagent hovers where verified item metadata exists.",
+                "Item icon lookup favors verified artwork and falls back to 23 item-type illustrations rather than displaying widespread question marks.",
+                "Bundled silver gauntlet cursor based on the supplied reference; ordinary text-selection cursor remains in inputs."
+              ]
+            },
+            {
+              "title": "Characters, profiles & member directory",
+              "items": [
+                "One Discord-linked member can register a main and multiple alts, including class, roles, level and professions where provided.",
+                "Revamped searchable member directory with personalized portraits, profile previews, and member activity indicators.",
+                "Profile Studio with immediate live preview, curated fantasy portraits, emblems, scenery, themes, layouts, banners and achievement showcase.",
+                "Portrait tiles keep a proper aspect ratio; editor sections expand independently with their own scrolling when necessary.",
+                "Profile trophy badges are larger and easier to read; users can customize which earned badges to display.",
+                "Authorized officers assign an official displayed guild rank; members select presentation style but cannot promote themselves.",
+                "Member commendations highlight traits such as Helpful, Welcoming, Patient, Reliable, Leadership, and Fun to Play With."
+              ]
+            },
+            {
+              "title": "Achievement library & recognition",
+              "items": [
+                "48 currently active guild achievements: 30 exact Dungeon Ledger guild-achievement definitions plus 18 original CritBot service/crafting/community awards.",
+                "All 48 corresponding icons are bundled locally and appear in the catalog, award manager, member trophies, profile editor, and Discord card artwork.",
+                "Achievement names, descriptions, categories, point values, rarity, and artwork are linked to their catalog records.",
+                "Pre-1.01 achievements are archived rather than deleted; prior unlocks, reward role IDs, and historical awards are preserved.",
+                "Old achievement auto-rules are disabled when their catalog entries are archived; new award verification remains officer-controlled.",
+                "Rarity-specific achievement card art and optional original portrait/emblem assets remain available."
+              ]
+            },
+            {
+              "title": "Social, notifications & member preferences",
+              "items": [
+                "In-dashboard notification inbox and compact bell preview cover relevant requests, groups, events, and member commendations.",
+                "Members set activity interests, dashboard theme, information density, Hub priorities, sidebar style, and notice categories.",
+                "Settings shows focused Appearance, My Activities, and Notifications panels with immediate preview instead of a wall of controls.",
+                "Important personal actions are surfaced on the member’s Hub without sending unnecessary Discord pings."
+              ]
+            },
+            {
+              "title": "Officer governance, feedback & operational tools",
+              "items": [
+                "Granular dashboard permissions, quick-start access presets, Welcome Team notes distinct from restricted officer notes.",
+                "Corrected route-permission mapping for Find Groups so authorized users, including the guild owner, can enter.",
+                "Officer tools retain the command view, conduct records, member follow-ups, treasury ledger, and activity reporting.",
+                "Private feedback can be submitted for Bot, Discord, or Guild; officers review and triage it inside the Feedback area.",
+                "Suggestions retain dashboard/Discord submission, voting, management, and separate submission/feed channel configuration.",
+                "Channel-control refresh and manual Discord channel-ID overrides help with newly created or missing channels.",
+                "Event management, achievement awarding, profile rank changes, and member access respect the existing permission and audit rules."
+              ]
+            },
+            {
+              "title": "Reliability, packaging & boundaries",
+              "items": [
+                "Request Studio initialization-order freeze fixed; search and category controls attach correctly.",
+                "Catalog imports and achievement migrations are idempotent and avoid replacing member data or duplicating records.",
+                "The dashboard and bot share a single canonical release number and complete version-history view.",
+                "Retired experimental integrations are not included; this release contains the Discord bot and dashboard only.",
+                "Release packages omit production database, credentials, and demo fixtures; they preserve existing environment/proxy/Docker settings."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "1.2",
+      "title": "Groups, treasury and guild involvement",
+      "description": "Major update and subsequent hotfixes.",
+      "releases": [
+        {
+          "version": "1.2",
+          "title": "Feature release",
+          "date": "2026-11-13",
+          "sections": [
+            {
+              "title": "Groups & Discord",
+              "items": [
+                "Cleaner role-by-role dungeon recruitment embed with visible open slots",
+                "Group leaders can remove roster members from dashboard",
+                "Improved group member management for leveling and questing"
+              ]
+            },
+            {
+              "title": "Guild Treasury",
+              "items": [
+                "Gold, silver and copper entered separately and stored in exact copper",
+                "Choose guild depositor or recipient from synced Discord roster",
+                "CSV export of full immutable ledger"
+              ]
+            },
+            {
+              "title": "Guild Involvement",
+              "items": [
+                "Private member questionnaire and saved responses",
+                "Dedicated officer view and handle access permissions",
+                "Officer assignment, status tracking, and private follow-up notes"
+              ]
+            },
+            {
+              "title": "Member sign-in",
+              "items": [
+                "Optional 30-day remembered browser session after Discord verification"
+              ]
+            },
+            {
+              "title": "Release management",
+              "items": [
+                "Manual owner/Pope release label and changelog editor with audit history"
+              ]
+            }
+          ]
+        },
+        {
+          "version": "1.2.1",
+          "title": "Horizontal group layout and Discord embeds",
+          "date": "2026-11-13",
+          "sections": [
+            {
+              "title": "Group UI hotfix",
+              "items": [
+                "Simplified Discord dungeon recruitment embed with compact role columns and open slots",
+                "Horizontal dashboard group roster, signup and leader controls"
+              ]
+            }
+          ]
+        },
+        {
+          "version": "1.2.2",
+          "title": "Group controls, characters and involvement",
+          "date": "2026-11-13",
+          "sections": [
+            {
+              "title": "Hotfix 1.2.2",
+              "items": [
+                "Group creators and authorized officers may add/remove members and delete groups.",
+                "Fix officer rank assignment permissions on member profiles.",
+                "Member characters can select multiple class-compatible roles; a separate officer capability controls editing other members.",
+                "Involvement questionnaire adds main/preferred names, multiple-choice and checkbox answers, plus confidential officer review."
+              ]
+            }
+          ]
+        },
+        {
+          "version": "1.2.3",
+          "title": "Release history and involvement layout",
+          "date": "2026-11-13",
+          "sections": [
+            {
+              "title": "Hotfix 1.2.3",
+              "items": [
+                "Version History groups updates under their main 1.0, 1.1, and 1.2 release tabs, with individually expandable verified hotfix entries.",
+                "Guild Involvement questionnaire reorganized into four clearly labeled sections with compact option cards, saved answers and concise officer review cards.",
+                "Existing private answers, reviewer permissions and review workflows preserved."
+              ]
+            }
+          ]
+        },
+        {
+          "version": "1.2.4",
+          "title": "Questionnaire & Release Notes Layout Fix",
+          "date": "2026-11-13",
+          "sections": [
+            {
+              "title": "Hotfix 1.2.4",
+              "items": [
+                "Fix Guild Involvement checkbox sizing, text labels and full-width desktop layout.",
+                "Arrange questionnaire sections in readable two-column desktop cards with responsive mobile controls.",
+                "Expand version history to full available width; remove the nested fixed-height scroll area, enlarge release cards."
+              ]
+            }
+          ]
+        },
+        {
+          "version": "1.2.5",
+          "title": "Questionnaire review sorting and navigation",
+          "date": "2026-11-13",
+          "sections": [
+            {
+              "title": "Hotfix 1.2.5",
+              "items": [
+                "Compact review queue with search, reviewer/status/interest filters, sorting and pagination.",
+                "Expandable member answers with permission-scoped follow-ups and filtered CSV export."
+              ]
+            }
+          ]
+        },
+        {
+          "version": "1.2.6",
+          "title": "Involvement 500 Fix & Release History Redesign",
+          "date": "2026-11-13",
+          "sections": [
+            {
+              "title": "Questionnaire stability",
+              "items": [
+                "Handle missing questionnaire tables safely after incomplete deployments without replacing existing answers.",
+                "Read older or malformed saved answer rows without crashing member pages.",
+                "Fix review queue sorting for ISO-formatted and missing timestamps; preserve current filters and export."
+              ]
+            },
+            {
+              "title": "Release history layout",
+              "items": [
+                "Replace nested scrolling release notes with a wide, single-page timeline.",
+                "Keep 1.0, 1.1, and 1.2 release families and individual hotfix details.",
+                "Move manual release-note editing into a collapsed leadership-only section."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

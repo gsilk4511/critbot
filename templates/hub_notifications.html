@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block heading %}Your Notifications{% endblock %}
+{% block subheading %}Only meaningful updates from guild activities and member interactions.{% endblock %}
+{% block content %}
+<section class="social-inbox">
+ <div class="social-inbox-head"><p>Updates about your requests, deliveries, and guildmates. No Discord DMs are sent by this feature.</p><form method="post" action="{{url_for('social.mark_all')}}"><button class="hub-secondary">Mark all as read</button></form></div>
+ {% for n in notices %}
+ <form method="post" action="{{url_for('social.mark_one',notice_id=n.id)}}"><button class="social-notice {{'social-new' if not n.read_at else ''}}" type="submit"><span class="social-notice-symbol">{{'✦' if n.kind=='commendation' else '⚒' if n.kind=='request' else '◉'}}</span><span class="social-notice-detail"><strong>{{n.title}}</strong><small>{{n.message}}</small><em>{{n.created_at[:16]}} UTC</em></span><span>Open →</span></button></form>
+ {% else %}<div class="hub-empty"><h3>You're all caught up.</h3><p>Request updates and commendations will appear here when they happen.</p><a href="{{url_for('hub.home')}}">Back to Guild Hub →</a></div>{% endfor %}
+</section>
+{% endblock %}

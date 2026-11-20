@@ -1,0 +1,71 @@
+/* CritBot Dev E · direct access, real portrait proportions, readable ranks. */
+.ge-workspace{--ge-accent:#deaa6e;display:flex;flex-direction:column;gap:10px;min-width:0;min-height:0;height:100%;color:#efe1d5}
+.ge-page-head{display:flex;align-items:center;justify-content:space-between;gap:14px;background:linear-gradient(112deg,#402824,#221e25 66%);border:1px solid #795442;border-radius:11px;padding:13px 19px;flex:none;min-width:0}
+.ge-page-head h2{font-family:inherit;font-size:23px;font-weight:800;line-height:1.15;color:#ffdab0;margin:3px 0 4px}
+.ge-page-head p{font-size:12px;line-height:1.4;color:#d0b9ac;margin:0}
+.ge-page-head a,.ge-head-actions a{color:#e1bc8b;font-size:12px;white-space:nowrap;text-decoration:none}
+.ge-head-actions{display:flex;gap:10px;align-items:center}
+.ge-columns{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(355px,.9fr);gap:12px;min-height:0;flex:1}
+.ge-panel{border:1px solid #5a4540;border-radius:11px;background:linear-gradient(150deg,#272027,#171a24);padding:12px;min-height:0;min-width:0;display:flex;flex-direction:column;gap:9px;overflow:hidden}
+.ge-pane-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 2px 5px;border-bottom:1px solid #59443d;flex:none}
+.ge-pane-top h3{font-size:16px;color:#f0c48f;font-weight:800;margin:0}
+.ge-pane-top>span{font-size:10px;color:#b8a5a0}
+.ge-search-row{display:flex;gap:7px;min-height:34px;flex:none}
+.ge-search-row input{flex:1;min-width:0}
+.ge-workspace input,.ge-workspace select,.ge-workspace textarea{color:#efddd0;background:#18151a;border:1px solid #644b43;border-radius:6px;padding:8px;font-size:12px;width:100%;min-width:0;box-sizing:border-box}
+.ge-workspace label{display:flex;flex-direction:column;gap:5px;font-size:11px;font-weight:750;color:#dfc0a0;min-width:0}
+.ge-list{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:7px;padding-right:3px}
+.ge-group-card{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#24222b;border:1px solid #5a4641;border-radius:8px;padding:11px;min-width:0;flex:none}
+.ge-group-card>div{min-width:0;flex:1}
+.ge-group-card strong{display:block;font-size:13px;font-weight:790;color:#fff0d8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:4px 0}
+.ge-group-card p{color:#b5aeb2;font-size:11px;margin:2px 0;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ge-group-card>a,.ge-primary{display:inline-flex;justify-content:center;align-items:center;gap:6px;background:#d4a36d;color:#201710!important;border:1px solid #efc28c;border-radius:7px;padding:10px 12px;font-weight:850;font-size:12px;white-space:nowrap;text-decoration:none;cursor:pointer}
+.ge-primary:hover,.ge-group-card>a:hover{filter:brightness(1.1)}
+.ge-primary:disabled{filter:grayscale(.8);opacity:.6;cursor:not-allowed}
+.ge-caps{font-size:10px;font-weight:800;letter-spacing:.8px;color:#d7ab79}
+.ge-card-meta{display:flex;gap:11px;flex-wrap:wrap;font-size:10px;color:#a9abb8;margin-top:8px}
+.ge-muted{color:#b1a7a5;font-size:12px;padding:15px}.ge-pager{display:flex;gap:9px;align-items:center;justify-content:space-between;flex:none;font-size:11px;color:#cbb39a;padding-top:7px;border-top:1px solid #51433e}
+.ge-pager button{background:#352c31;border:1px solid #735447;border-radius:5px;color:#efceaa;padding:7px 13px;cursor:pointer}.ge-pager button:disabled{opacity:.4}
+.ge-create-panel form,.ge-detail-form{display:flex;flex-direction:column;gap:9px;min-height:0;overflow-y:auto;padding:0 3px 6px}
+.ge-form-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.ge-form-set{display:flex;flex-direction:column;gap:9px}.ge-form-set[hidden],.ge-workspace [hidden]{display:none!important}
+.ge-levels{display:flex;gap:6px;align-items:center}.ge-levels span{color:#afadaf;font-size:11px}
+.ge-notice{border:1px solid #705039;border-radius:7px;background:#302520;padding:9px 11px;color:#d6bea8;font-size:11px;line-height:1.5}.ge-notice p{margin:4px 0 0}.ge-notice a{color:#ffd29e}
+.ge-actions{display:flex;align-items:center;justify-content:space-between;gap:10px}.ge-actions a{color:#e8be8e;font-size:12px}
+.ge-create-dropdown{position:relative}.ge-create-dropdown>summary{list-style:none;cursor:pointer}.ge-create-dropdown>div{position:absolute;right:0;top:calc(100% + 6px);width:178px;background:#202029;border:1px solid #906849;border-radius:7px;padding:6px;box-shadow:0 15px 35px #000a;z-index:40;display:flex;flex-direction:column;gap:3px}.ge-create-dropdown>div a{padding:9px 10px;border-radius:5px}.ge-create-dropdown>div a:hover{background:#4a302b}
+.ge-calendar-panel .cw-calendar{max-height:none;flex:0 1 auto}.ge-calendar-panel .cw-calendar-help{display:none}.ge-calendar-panel>.ge-notice{margin-top:auto}
+.ge-roster{overflow-y:auto;min-height:0;flex:1;display:flex;flex-direction:column;gap:7px}.ge-party-member{display:flex;align-items:center;gap:9px;background:#26232b;border:1px solid #584640;border-radius:7px;padding:10px;color:#f6dfc8}.ge-party-member strong{flex:1}.ge-party-member small{color:#b7b0b4}.ge-party-member b{font-size:9px;color:#f3c17f}
+/* Profiles: guild rank is official and must always be prominent in every member layout. */
+.ge-guild-rank{display:inline-flex;align-items:center;gap:10px;padding:8px 13px;background:linear-gradient(90deg,#73462e,#3c2929);border:2px solid #e2ad65;border-radius:9px;box-shadow:0 7px 19px #0008,0 0 0 2px #1c1215;color:#fff0d4;min-width:185px;margin:4px 0 7px}
+.ge-guild-rank .ge-rank-crest{font-size:25px;color:#ffcf81;filter:drop-shadow(0 1px 5px #000)}
+.ge-guild-rank small{display:block;color:#e2bc8f;font-weight:850;letter-spacing:1px;font-size:9px}
+.ge-guild-rank strong{font-size:clamp(17px,2vw,23px);letter-spacing:.4px;line-height:1.3}
+.p-rank-crest .ge-guild-rank{border-radius:2px 20px 2px 20px;background:#2a2028;border-color:#ddb270}.p-rank-title .ge-guild-rank{background:#0a090855;border-color:transparent;border-bottom:2px solid #e2ad65;border-radius:0;box-shadow:none;padding:4px 2px}
+.ge-officer-rank-box{margin-top:16px;display:flex;justify-content:space-between;align-items:center;gap:15px;border:1px solid #93724c;border-radius:11px;background:linear-gradient(95deg,#2c2227,#171820);padding:15px;color:#f5d8b5}
+.ge-officer-rank-box strong{font-size:15px}.ge-officer-rank-box p{font-size:11px;margin:6px 0 0;color:#aeb1bc}.ge-officer-rank-box form{display:flex;gap:9px;align-items:center}.ge-officer-rank-box select{min-width:170px;background:#19171d;border:1px solid #84684a;color:#f9e7ca;padding:9px;border-radius:6px}
+.ge-rank-choose{display:flex;flex-wrap:wrap;align-items:end;gap:9px;padding:7px;border:1px solid #654c3e;background:#241e23;border-radius:8px;flex:none;font-size:11px}.ge-rank-choose label{display:flex;align-items:center;gap:8px;color:#f6ce9d}.ge-rank-choose select{background:#141319;color:#f2ddbb;border:1px solid #694b3c;padding:5px}.ge-rank-choose small{font-size:10px;color:#b8aaa2}
+.ge-studio-rank{display:inline-flex;flex-direction:column;border:1px solid #d79a60;background:#392622;border-radius:6px;padding:5px 10px;color:#f6dba9;min-width:126px;margin:4px 0}.ge-studio-rank span{font-size:9px;letter-spacing:.6px;font-weight:750}.ge-studio-rank strong{font-size:16px;color:#fff3d4}.p-rank-crest .ge-studio-rank{border-radius:1px 12px 1px 12px;background:#281f29}.p-rank-title .ge-studio-rank{background:transparent;border:0;border-bottom:2px solid #e8b579;border-radius:0}
+/* Portraits should always be full square portraits, never wide cropped ribbons. */
+@media(min-width:1050px) and (min-height:650px){
+ .ftc-profile-editor .studio-portrait-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px!important;overflow:visible!important;max-height:none!important}
+ .ftc-profile-editor .studio-portrait-option{height:auto!important;min-height:0!important;aspect-ratio:auto;display:flex;flex-direction:column;gap:2px;padding:5px}
+ .ftc-profile-editor .studio-portrait-option img,.ftc-profile-editor .studio-portrait-none{display:block!important;width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:1 / 1!important;object-fit:cover!important;object-position:center 25%;flex:none}
+ .ftc-profile-editor .studio-portrait-option small{display:block;font-size:10px;line-height:15px;height:15px}
+ .ftc-profile-editor .cw-studio-accordion[open]{flex:1;overflow:hidden}
+ .ftc-profile-editor .cw-studio-accordion-content{height:100%;max-height:none!important;overflow-y:auto!important;overscroll-behavior:contain;padding:7px 9px 16px;min-height:0}
+ .ftc-profile-editor .cw-studio-preview-dock{overflow-y:auto!important}
+ .ftc-profile-editor #personal-style,.ftc-profile-editor #achievement-showcase,.ftc-profile-editor #personal-details{overflow-y:auto!important}
+ .ftc-profile-editor .studio-award-choices{overflow-y:auto!important;max-height:none!important}
+}
+/* Badges must communicate the achievement. Large artwork, readable title, rarity. */
+.studio-preview-awards{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+.studio-preview-award{min-height:82px!important;display:flex!important;align-items:center;gap:10px;padding:11px!important;font-size:12px!important;border-width:2px!important;min-width:0}
+.studio-preview-award>span{font-size:34px!important;line-height:1.2;flex:none}.studio-preview-award b{font-size:12px!important;line-height:1.4!important;white-space:normal;overflow-wrap:anywhere}
+.profile-trophy-illustration{min-height:145px}.profile-trophy-icon{font-size:73px}.profile-trophy-copy h4{font-size:19px}
+/* Restore scrolling where content actually exceeds the space, never cut off actions. */
+.ftc-workstation-page .ftc-main{overflow-y:auto!important;overflow-x:hidden!important}
+.ftc-workstation-page .cw-surface,.ftc-workstation-page .cw-rows,.ftc-workstation-page .cw-studio-accordion-content{overscroll-behavior:contain}
+.ftc-workstation-page .cw-surface{overflow-y:auto}
+.ftc-profile-editor .profile-studio-main,.ftc-profile-editor .cw-studio-preview-dock{min-height:0}
+.ge-workspace [hidden],.ge-group-card[hidden]{display:none!important}
+@media(max-width:1130px){.ge-columns{grid-template-columns:1fr;overflow-y:auto}.ge-workspace{height:auto;min-height:650px}.ge-panel{min-height:310px}.ge-create-panel form{overflow:visible}}
+@media(max-width:650px){.ge-page-head{flex-wrap:wrap}.ge-form-row{grid-template-columns:1fr}.ge-officer-rank-box,.ge-officer-rank-box form{flex-wrap:wrap}.studio-preview-awards{grid-template-columns:1fr!important}}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block heading %}Discord Channel Control{% endblock %}
+{% block subheading %}Refresh Discord channel lists or manually route messages when the cache is behind{% endblock %}
+{% block content %}
+<section class="studio-panel">
+  <h2>Live directory sync</h2><p>The bot normally refreshes channel lists automatically. Press Refresh to request a new sync. Your dashboard will show a pending status until the actual Discord bot confirms it.</p>
+  <form method="post" action="{{url_for('channels.refresh')}}"><button type="submit" class="btn">↻ Request Discord Channel Refresh</button></form>
+  <p><b>Last request:</b> {{sync.requested_at or 'Never'}} · <b>Last completion:</b> {{sync.completed_at or 'Never'}} · <b>Status:</b> {{sync.status|title}}{% if sync.detail %} — {{sync.detail}}{% endif %}</p>
+  {% if viewer.level in ('owner','pope') %}
+  <div class="channel-route-box"><h3>Achievement announcement destination</h3><p>Paste a text channel ID to override the configured announcement channel (leave empty to use the server's default from .env). This will not grant missing bot permissions.</p>
+  <form method="post" action="{{url_for('channels.announcement')}}"><input name="announcement_id" inputmode="numeric" pattern="[0-9]{17,22}" value="{{announcement_id}}" placeholder="Discord channel ID (or blank for default)" aria-label="Announcement channel override"><button class="btn" type="submit">Save announcement route</button></form></div>{% endif %}
+  <p>For an urgent new channel, paste its numeric ID directly into any Event, Suggestions, or Activity Tracking channel field. The bot still must be in the server and allowed to view/send in that channel.</p>
+</section>
+<div class="profile-content-grid">
+<section class="studio-panel"><h3>Visible text channels ({{channels|length}})</h3>{% for c in channels %}<p><code>{{c.channel_id}}</code> · {{c.name}}</p>{% else %}<p>No channels available. Check Discord permissions and whether the bot is online.</p>{% endfor %}</section>
+<section class="studio-panel"><h3>Visible voice channels ({{voice|length}})</h3>{% for c in voice %}<p><code>{{c.channel_id}}</code> · {{c.name}}</p>{% else %}<p>No voice channels synced yet.</p>{% endfor %}</section>
+</div>
+{% endblock %}

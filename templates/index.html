@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block heading %}Achievements{% endblock %}
+{% block subheading %}Manage achievements and members in one place.{% endblock %}
+{% block content %}
+<div class="main-metrics"><span><strong>{{ items|length }}</strong> Achievements</span><span><strong>{{ members|length }}</strong> Members synced</span><span><strong>{{ total_unlocks }}</strong> Unlocks</span><span class="metric-note">Member list updates when Critbot syncs with Discord</span></div>
+<div class="main-panels">
+<section class="compact-panel" aria-labelledby="achievement-heading">
+ <div class="compact-head"><div><h2 id="achievement-heading">Achievements</h2><p>All available guild achievements</p></div>{% if can_access('achievement_editor') %}<a class="small-cta" href="{{ url_for('new') }}">+ Create</a>{% endif %}</div>
+ <div class="panel-search"><input type="search" id="ach-search" placeholder="Search achievements..." autocomplete="off"><select id="ach-category" aria-label="Filter category"><option value="">All categories</option>{% for cat in categories %}<option value="{{cat|lower}}">{{cat}}</option>{% endfor %}</select><select id="ach-rarity" aria-label="Filter rarity"><option value="">All rarities</option>{% for rarity in ['Common','Uncommon','Rare','Epic','Legendary'] %}<option value="{{ rarity|lower }}">{{ rarity }}</option>{% endfor %}</select></div>
+ <div class="list-count" id="ach-count"></div><div class="compact-list" id="ach-list">
+ {% for a in items %}<div class="compact-row ach-row" data-search="{{ (a.name ~ ' ' ~ a.description)|lower|e }}" data-rarity="{{ a.rarity|lower }}" data-category="{{a.category|lower|e}}"><span class="list-icon">{{ a.icon|achievement_icon }}</span><div class="row-detail"><strong>{{ a.name }}</strong><small title="{{ a.description|e }}">{{ a.description }}</small>{% if a.verification %}<small class="crit-verify-note">Verification: {{a.verification}}</small>{% endif %}</div><div class="row-tags"><span class="rarity {{ a.rarity|lower }}">{{ a.rarity }}</span><small>{{a.category}}</small><span>{{ a.points }} pts</span></div>{% if can_access('achievement_editor') %}<a class="icon-link" href="{{ url_for('edit', achievement_id=a.id) }}" aria-label="Edit {{ a.name }}">Edit</a>{% endif %}{% if can_access('achievement_delete') %}<a class="icon-link danger-link" href="{{ url_for('delete_achievement', achievement_id=a.id) }}" aria-label="Delete {{ a.name }}">Delete</a>{% endif %}</div>{% else %}<p class="list-placeholder">No achievements yet. Create one to get started.</p>{% endfor %}
+ </div><p class="list-placeholder" id="ach-empty" hidden>No matching achievements.</p>
+</section>
+<section class="compact-panel" aria-labelledby="members-heading">
+ <div class="compact-head"><div><h2 id="members-heading">Server Members</h2><p>Select a member, then manage several achievements together</p></div>{% if can_access('bulk_awards') %}<a class="subtle-link" href="{{ url_for('bulk') }}">Bulk manage ↗</a>{% endif %}</div>
+ <div class="panel-search"><input type="search" id="member-search" placeholder="Search member name..." autocomplete="off"></div>
+ <div class="list-count" id="member-count"></div><div class="compact-list" id="member-list">
+ {% for m in members %}<div class="compact-row member-row" data-search="{{ (m.display_name ~ ' ' ~ m.username)|lower|e }}"><span class="avatar-letter">{{ m.display_name[:1]|upper }}</span><div class="row-detail"><strong><a href="{{url_for('member_profile',member_id=m.member_id)}}">{{ m.display_name }}</a></strong><small>{{ m.username }}</small></div><div class="member-buttons" {% if not can_access('awards') %}hidden{% endif %}><button type="button" class="member-add" data-member="{{ m.member_id }}" data-name="{{ m.display_name|e }}" data-action="award">+ Add</button><button type="button" class="member-revoke" data-member="{{ m.member_id }}" data-name="{{ m.display_name|e }}" data-action="revoke">Revoke</button></div></div>{% else %}<p class="list-placeholder">No members synced yet. Start the Discord bot to sync the roster.</p>{% endfor %}
+ </div><p class="list-placeholder" id="member-empty" hidden>No matching members.</p>
+</section>
+</div>
+<dialog id="achievement-dialog" class="picker-dialog member-workspace" aria-labelledby="picker-title">
+<form id="member-action-form">
+<div class="picker-top"><div><p class="picker-eyebrow">MEMBER ACHIEVEMENTS</p><h2 id="picker-title">Manage achievements</h2><p id="picker-member-name"></p></div><button type="button" class="picker-close" id="picker-close" aria-label="Close">×</button></div>
+<div class="picker-mode-tabs" aria-label="Achievement action"><button type="button" id="mode-award">+ Add</button><button type="button" id="mode-revoke">Revoke</button></div>
+<p id="picker-feedback" class="picker-feedback" aria-live="polite" hidden></p>
+<div id="picker-choose"><div class="picker-search-row"><input type="search" id="picker-search" placeholder="Search achievements…" autocomplete="off" maxlength="100" aria-label="Search achievements to manage"><button type="button" id="picker-clear-search" class="picker-secondary">Clear</button></div>
+<p class="subtitle">Select one or several achievements. Queued changes update here without leaving this member.</p>
+<div id="picker-options" class="picker-options"></div><p id="picker-empty" class="list-placeholder" hidden>No matching achievements.</p>
+<div class="picker-footer"><span id="picker-selection">Select achievements</span><button type="submit" class="btn" id="picker-submit" disabled>Review selection</button></div></div>
+<section id="picker-review" hidden aria-labelledby="review-title"><h3 id="review-title">Confirm changes</h3><p id="review-description"></p><ul id="review-list"></ul><p class="subtitle">Critbot will process these through its existing award queue. Associated roles will be handled automatically.</p><div class="picker-footer"><button type="button" class="picker-secondary" id="review-back">Back to selection</button><button type="button" class="btn" id="review-confirm">Confirm</button></div></section>
+</form></dialog>
+<script id="achievement-data" type="application/json">{{ achievement_data|tojson }}</script>
+<script id="member-state" type="application/json">{{ {'owned':owned,'waiting':waiting}|tojson }}</script>
+<script src="{{ url_for('static', filename='main.js',v='015') }}" defer></script>
+{% endblock %}

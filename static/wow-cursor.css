@@ -1,0 +1,8 @@
+/* Cursor extracted directly from user-supplied WoW hand screenshot. */
+html, body, body *, a, button, select, summary, label, [role="button"], [tabindex] {
+  cursor: url('/static/wow-cursor/wow-gauntlet-32.png') 3 2, pointer !important;
+}
+input[type="text"], input[type="search"], input[type="number"],
+input[type="password"], input[type="email"], textarea,
+[contenteditable="true"] { cursor: text !important; }
+[disabled], :disabled { cursor: not-allowed !important; }

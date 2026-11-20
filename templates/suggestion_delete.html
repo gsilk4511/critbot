@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block heading %}Delete suggestion{% endblock %}
+{% block subheading %}Permanent removal · separate high-trust permission{% endblock %}
+{% block content %}
+<a class="profile-back" href="{{url_for('suggestions.detail',sid=item.id)}}">← Return to suggestion</a>
+<section class="ops-panel suggestion-delete-confirm"><span class="profile-overline">IRREVERSIBLE ACTION</span>
+<h2>Delete “{{item.title}}”?</h2>
+<p>This action removes the suggestion, {{votes}} vote{{'' if votes==1 else 's'}}, and any linked Discord suggestion message. If the idea is already published, CritBot removes the Discord post first, then deletes the stored record. It may remain marked “pending deletion” until Discord confirms.</p>
+<p><strong>Prefer to hide it temporarily?</strong> Archive the suggestion from its detail page instead.</p>
+<form method="post" action="{{url_for('suggestions.delete',sid=item.id)}}" class="ops-form">
+<label>Type the exact suggestion title to confirm<input name="confirm_title" required autocomplete="off" maxlength="80" placeholder="{{item.title}}"></label>
+<div class="ops-toolbar"><a class="picker-secondary" href="{{url_for('suggestions.detail',sid=item.id)}}">Cancel</a><button class="danger-button" type="submit">Permanently delete suggestion</button></div>
+</form>
+</section>
+{% endblock %}

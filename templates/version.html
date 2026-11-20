@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block heading %}CritBot Changelog{% endblock %}
+{% block subheading %}Every release, with its fixes grouped together{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{{url_for('static',filename='release-history-126.css',v='126')}}">{% endblock %}
+{% block content %}
+<section class="cb126-history" id="critbot-history">
+  <div class="cb126-topline">
+    <div><span class="cb126-kicker">CRITBOT / RELEASE HISTORY</span><h2>What's changed</h2><p>Browse releases without digging through a tiny scroll box.</p></div>
+    <div class="cb126-current"><small>INSTALLED VERSION</small><strong>v{{version}}</strong><span>{{release}}</span></div>
+  </div>
+  {% if manual.notes and manual.notes.strip() %}
+  <details class="cb126-manual"><summary>Leadership's latest release message <span>Show notes</span></summary><div class="cb126-manual-body">{{manual.notes}}</div></details>
+  {% endif %}
+  <div class="cb126-main">
+    <nav class="cb126-tabs" aria-label="Release families">
+      {% for group in release_notes.release_groups %}
+      <button type="button" data-family="{{group.version}}" class="{{'selected' if loop.last else ''}}" aria-pressed="{{'true' if loop.last else 'false'}}">
+        <strong>{{group.version}}</strong><span>{{group.releases|length}} {{'release' if group.releases|length==1 else 'updates'}}</span>
+      </button>
+      {% endfor %}
+    </nav>
+    <div class="cb126-panes">
+    {% for group in release_notes.release_groups %}
+      <section class="cb126-pane" data-release-family="{{group.version}}" {% if not loop.last %}hidden{% endif %}>
+        <div class="cb126-family-heading"><div><span>RELEASE FAMILY {{group.version}}</span><h3>{{group.title}}</h3><p>{{group.description}}</p></div><label>Search changes<input class="cb126-search" type="search" placeholder="Find a feature or fix" aria-label="Search {{group.version}} updates"></label></div>
+        <div class="cb126-timeline">
+          {% for entry in group.releases|reverse %}
+            <details class="cb126-item" {% if loop.first %}open{% endif %}>
+              <summary>
+                <div class="cb126-version"><strong>{{entry.version}}</strong><small>{{'MAIN' if entry.version==group.version or (group.version=='1.1' and entry.version=='1.01') else 'HOTFIX'}}</small></div>
+                <div class="cb126-info"><strong>{{entry.title}}</strong><span>{{entry.date}}</span></div>
+                <div class="cb126-chevron" aria-hidden="true">⌄</div>
+              </summary>
+              <div class="cb126-details">
+                {% for section in entry.sections %}
+                <div class="cb126-section"><h4>{{section.title}}</h4><ul>{% for item in section['items'] %}<li>{{item}}</li>{% endfor %}</ul></div>
+                {% endfor %}
+              </div>
+            </details>
+          {% endfor %}
+        </div>
+        <p class="cb126-footnote">Only documented updates are shown. Individual hotfixes are listed beneath their main version.</p>
+      </section>
+    {% endfor %}
+    </div>
+  </div>
+  {% if viewer.level in ('owner','pope') %}
+  <details class="cb126-edit"><summary><strong>Edit release announcement</strong><span>Leadership only · Does not change installed code</span></summary>
+    <form method="post" action="{{url_for('version_save')}}">
+      <label>Displayed version<input name="version" value="{{manual.version}}" maxlength="24" required></label>
+      <label>Release title<input name="title" value="{{manual.title}}" maxlength="100" required></label>
+      <label class="cb126-note-input">Announcement / manual notes<textarea name="notes" maxlength="8000" rows="5">{{manual.notes}}</textarea></label>
+      <button type="submit">Save release announcement</button>
+    </form>
+  </details>
+  {% endif %}
+  <p class="cb126-endnote">Change history describes releases, not an automatic rollback. Production updates require an RJ deployment and a database backup.</p>
+</section>
+<script src="{{url_for('static',filename='release-history-126.js',v='126')}}" defer></script>
+{% endblock %}

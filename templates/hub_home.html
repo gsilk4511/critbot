@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block heading %}Guild Hub{% endblock %}
+{% block subheading %}Your second-monitor guild companion{% endblock %}
+{% block content %}
+<section class="hub-desk companion-hub" aria-label="Guild activity workstation">
+ <header class="hub-desk-welcome">
+  <div class="hub-desk-welcome-copy"><span class="hub-kicker">FLICK THE CRIT · LIVE GUILD DESK</span><h1>Welcome back, {{name}} <span>✦</span></h1><p>Jump into something, help a guildmate, or pick up where you left off.</p></div>
+  <div class="hub-desk-welcome-actions"><span class="hub-desk-preference">{{pref.interests[:2]|join(' · ') or 'All guild activities'}}</span><button class="cw-pill" type="button" data-dialog="cw-new-order">＋ Ask for help</button><a href="{{url_for('hub.settings')}}" title="Your dashboard settings">⚙</a></div>
+ </header>
+ <div class="hub-desk-grid">
+  <section class="desk-panel desk-attention">
+   <div class="desk-panel-head"><span class="desk-icon">◉</span><div><small>YOUR INBOX</small><h2>Needs attention</h2></div><a href="{{url_for('social.inbox')}}">All ↗</a></div>
+   <div class="desk-panel-body cw-panel-body">
+    {% set action_orders=recent_orders|selectattr('status','equalto','delivered')|list %}
+    {% for o in action_orders[:2] %}
+      <div class="cw-task"><div class="cw-task-info"><strong>{{o.title}}</strong><small>{{ ('Confirm quest help' if o.category=='Quest Help' else 'Confirm delivery') if o.requester_id==viewer.discord_id else 'Waiting on requester' }}</small></div>
+       {% if o.requester_id==viewer.discord_id %}<form method="post" action="{{url_for('requests.action',order_id=o.id,action='confirm')}}"><input type="hidden" name="origin" value="hub"><button class="cw-action" type="submit">Confirm ✓</button></form>{% else %}<span class="cw-muted">Pending</span>{% endif %}</div>
+    {% endfor %}
+    {% for o in recent_orders if o.status=='claimed' and o.helper_id==viewer.discord_id %}{% if loop.index<=2 %}
+     <div class="cw-task"><div class="cw-task-info"><strong>{{o.title}}</strong><small>{{'Finish helping' if o.category=='Quest Help' else 'Mark delivered'}}</small></div>
+     {% if not o.needs_guild_supplies or o.supplies_status=='provided' %}<form method="post" action="{{url_for('requests.action',order_id=o.id,action='delivered')}}"><input type="hidden" name="origin" value="hub"><button type="submit" class="cw-action">Done ✓</button></form>{% else %}<span class="cw-muted">Supplies pending</span>{% endif %}</div>
+    {% endif %}{% endfor %}
+    {% for n in notifications[:2] %}<a class="cw-task cw-task-link" href="{{n.link}}"><span class="cw-task-info"><strong>{{n.title}}</strong><small>{{n.message}}</small></span><span>↗</span></a>{% endfor %}
+    {% if not recent_orders and not notifications %}<div class="desk-empty"><strong>You're all caught up.</strong><small>Updates and guild commitments show here when they matter.</small></div>{% endif %}
+   </div>
+   <div class="desk-panel-foot"><a href="{{url_for('social.inbox')}}">Notifications</a><a href="{{url_for('requests.board')}}#my-requests">My requests ↗</a></div>
+  </section>
+  <section class="desk-panel desk-groups">
+   <div class="desk-panel-head"><span class="desk-icon">⚔</span><div><small>PARTY FINDER</small><h2>Looking for adventurers</h2></div><a href="{{url_for('groups.home')}}">All ↗</a></div>
+   <div class="desk-panel-body cw-panel-body">
+    {% for e in groups[:2] %}{% if e.open_count>0 or e.joined %}
+      <div class="cw-game"><div class="cw-task-info"><strong>{{e.title}}</strong><small>{{'On your roster' if e.joined else 'Recruiting now'}} · {{e.open_count}} open slots</small></div>
+      <div class="cw-slots">{% for slot in e.slots %}<span class="{{'cw-slot-open' if slot.open else ''}}">{{slot.name}} {{slot.used}}/{{slot.capacity}}</span>{% endfor %}</div>
+      {% if e.joined %}<a class="cw-action" href="{{e.link}}">Roster ↗</a>{% elif e.is_instant is defined and e.is_instant %}<a class="cw-action" href="{{e.link}}">Join group →</a>{% elif e.status=='posted' %}<button type="button" class="cw-action" data-dialog="cw-group-{{e.id}}">Join group →</button>{% else %}<a class="cw-action" href="{{e.link}}">Details ↗</a>{% endif %}</div>
+    {% endif %}{% else %}<div class="desk-empty"><strong>No groups forming.</strong><small>Create a dungeon, leveling, or questing group in seconds.</small></div>{% endfor %}
+   </div>
+   <div class="desk-panel-foot"><a href="{{url_for('groups.home')}}">Browse groups</a><a href="{{url_for('groups.home')}}">Find groups ↗</a></div>
+  </section>
+  <section class="desk-panel desk-events">
+   <div class="desk-panel-head"><span class="desk-icon">▦</span><div><small>GUILD CALENDAR</small><h2>Coming up</h2></div><a href="{{url_for('events.home')}}">Calendar ↗</a></div>
+   <div class="desk-panel-body cw-panel-body">
+    {% for e in events[:3] %}<div class="desk-event"><span class="desk-event-mark">{{'✦' if e.joined else '▦'}}</span><div><strong>{{e.title}}</strong><small>{{'Going · ' if e.joined else ''}}{{e.local_time}}</small></div><a href="{{url_for('events.detail',event_id=e.id)}}">Open ↗</a></div>
+    {% else %}<div class="desk-empty"><strong>The calendar is clear.</strong><small>Guild events will appear here when they're posted.</small></div>{% endfor %}
+   </div><div class="desk-panel-foot"><a href="{{url_for('events.home')}}">All events</a><a href="{{url_for('events.home')}}#event-calendar">Calendar ↗</a></div>
+  </section>
+  <section class="desk-panel desk-orders">
+   <div class="desk-panel-head"><span class="desk-icon">✚</span><div><small>ASK FOR A HAND</small><h2>Need help?</h2></div><a href="{{url_for('requests.board')}}">Board ↗</a></div>
+   <div class="desk-panel-body cw-panel-body">
+    <div class="cw-request-choice"><button type="button" data-dialog="cw-new-order" data-type="Quest Help"><span>🗺</span><strong>Quest help</strong><small>Find someone to adventure with</small></button><button type="button" data-dialog="cw-new-order" data-type="Crafting"><span>⚒</span><strong>Crafting order</strong><small>Request something made</small></button></div>
+    <p class="cw-subnote">Search the game catalog, select your toon, and post in seconds. No bank forms for quest help.</p>
+    <div class="cw-inline-links"><button data-dialog="cw-new-order" data-type="Materials" type="button">Materials</button><button data-dialog="cw-new-order" data-type="Help" type="button">Other help</button></div>
+   </div><div class="desk-panel-foot"><a href="{{url_for('requests.board')}}">All requests</a><a href="{{url_for('requests.board')}}#my-requests">Track mine ↗</a></div>
+  </section>
+  <section class="desk-panel desk-community">
+   <div class="desk-panel-head"><span class="desk-icon">♙</span><div><small>COMMUNITY</small><h2>Guildmates to know</h2></div><a href="{{url_for('members_page')}}">Directory ↗</a></div>
+   <div class="desk-panel-body cw-panel-body">
+    {% if pref.show_community %}{% for p in community_members[:3] %}<a class="desk-person" href="{{url_for('member_profile',member_id=p.member_id)}}"><span class="desk-avatar">{{p.display_name[:1]|upper}}</span><span><strong>{{p.display_name}}</strong><small>{{p.best_trait or 'Say hello'}}{% if p.votes %} · {{p.votes}} commendation{{'s' if p.votes!=1 else ''}}{% endif %}</small></span><span>↗</span></a>{% else %}<div class="desk-empty"><strong>Discover your guild.</strong><small>See who others describe as welcoming, helpful, or reliable.</small></div>{% endfor %}
+    {% else %}<div class="desk-empty"><strong>Community suggestions hidden.</strong><small>Change this anytime in settings.</small></div>{% endif %}
+   </div><div class="desk-panel-foot"><a href="{{url_for('members_page')}}">Find helpers</a><a href="{{url_for('member_profile',member_id=viewer.discord_id)}}">My profile ↗</a></div>
+  </section>
+  <section class="desk-panel desk-progress">
+   <div class="desk-panel-head"><span class="desk-icon">⚒</span><div><small>HELP A GUILDMATE</small><h2>Open requests</h2></div><a href="{{url_for('requests.board')}}">Board ↗</a></div>
+   <div class="desk-panel-body cw-panel-body">
+    {% for o in hub_open_orders[:3] %}<div class="cw-task"><div class="cw-task-info"><strong>{{o.title}}</strong><small>{{o.category}} · {{o.requester_name or 'A guildmate'}}</small></div>
+    <form method="post" action="{{url_for('requests.action',order_id=o.id,action='claim')}}"><input type="hidden" name="origin" value="hub"><button type="submit" class="cw-action">Help →</button></form></div>
+    {% else %}<div class="desk-empty"><strong>No open requests.</strong><small>When someone needs help, you'll see it here.</small></div>{% endfor %}
+   </div><div class="desk-panel-foot"><a href="{{url_for('requests.board')}}">Browse help requests</a><a href="{{url_for('member_profile',member_id=viewer.discord_id)}}">{{completed}} achievements ↗</a></div>
+  </section>
+ </div>
+ <nav class="desk-quickdock" aria-label="Quick actions"><span>QUICK ACCESS</span><button type="button" data-dialog="cw-new-order" data-type="Quest Help">＋ Quest help</button><button type="button" data-dialog="cw-new-order" data-type="Crafting">⚒ Crafting order</button><a href="{{url_for('groups.home')}}">⚔ Create / find groups</a><a href="{{url_for('characters.home')}}">♜ My characters</a><a href="{{url_for('hub.settings')}}">⚙ Customize</a></nav>
+</section>
+{% set studio_origin = 'hub' %}
+{% include '_request_studio.html' %}
+{% for e in groups[:2] %}{% if e.status=='posted' and not e.joined and e.open_count>0 and not (e.is_instant is defined and e.is_instant) %}
+<dialog class="cw-dialog cw-join-dialog" id="cw-group-{{e.id}}"><div class="cw-dialog-head"><div><span class="hub-kicker">JOIN A LIVE GROUP</span><h2>{{e.title}}</h2></div><button data-close-dialog aria-label="Close" type="button">✕</button></div><form class="cw-quick-form cw-group-form" action="{{url_for('hub.group',event_id=e.id)}}" method="post"><input type="hidden" name="origin" value="hub"><label>Choose a saved character<select name="character_id" class="cw-join-character"><option value="">Enter a character manually</option>{% for c in characters %}<option value="{{c.id}}" data-class="{{c.class_name}}">{{c.name}} · {{c.class_name}}</option>{% endfor %}</select></label><div class="cw-manual-character"><div class="cw-form-row"><label>Character name<input name="character_name" maxlength="40" placeholder="Your toon name"></label><label>Class<select name="character_class" class="cw-join-class"><option value="">Choose class</option>{% for cls in classes %}<option>{{cls}}</option>{% endfor %}</select></label></div></div><label>Your role<select name="role" class="cw-join-role" required>{% for s in e.slots if s.open %}<option value="{{s.name}}">{{s.name}} ({{s.capacity-s.used}} open)</option>{% endfor %}</select></label><div class="cw-dialog-actions"><a href="{{e.link}}">Full roster ↗</a><button class="cw-action" type="submit">Join this group →</button></div></form></dialog>
+{% endif %}{% endfor %}
+<script defer src="{{url_for('static',filename='workstation4.js',v='5')}}"></script>
+{% endblock %}

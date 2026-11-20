@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block heading %}Settings{% endblock %}
+{% block subheading %}Your CritBot, your way. Only a few choices at a time.{% endblock %}
+{% block content %}
+<section class="cbx-settings" aria-label="Personal CritBot settings">
+<form method="post" action="{{url_for('hub.settings')}}" id="cbx-form">
+ <div class="cbx-top">
+  <div><small>YOUR WORKSTATION</small><h2>Make CritBot feel like yours.</h2><p>Simple choices. See how they look before saving.</p></div>
+  <div class="cbx-save"><span id="cbx-save-status" role="status">Changes are saved only when you choose.</span><button type="submit" class="cbx-primary">Save changes ✓</button></div>
+ </div>
+ <div class="cbx-workspace">
+  <nav class="cbx-nav" aria-label="Settings sections">
+   <button type="button" class="cbx-nav-item is-selected" data-cbx-tab="appearance" aria-pressed="true"><span>◈</span><strong>Appearance</strong><small>Look and layout</small></button>
+   <button type="button" class="cbx-nav-item" data-cbx-tab="interests" aria-pressed="false"><span>⚔</span><strong>My activities</strong><small>What you want to see</small></button>
+   <button type="button" class="cbx-nav-item" data-cbx-tab="alerts" aria-pressed="false"><span>◉</span><strong>Notifications</strong><small>What deserves attention</small></button>
+  </nav>
+  <div class="cbx-panel-stack">
+   <section class="cbx-panel" data-cbx-panel="appearance">
+    <div class="cbx-panel-head"><h3>Appearance</h3><p>Choose a theme and how much information fits on your screen.</p></div>
+    <span class="cbx-field-title">Your color theme</span>
+    <div class="cbx-themes">
+     <label class="cbx-choice cbx-theme-ember"><input type="radio" name="theme" value="ember" {{'checked' if pref.theme=='ember'}}><span class="cbx-theme-swatch"></span><strong>Ember</strong><small>Crimson & gold</small></label>
+     <label class="cbx-choice cbx-theme-midnight"><input type="radio" name="theme" value="midnight" {{'checked' if pref.theme=='midnight'}}><span class="cbx-theme-swatch"></span><strong>Midnight</strong><small>Slate & blue</small></label>
+     <label class="cbx-choice cbx-theme-forest"><input type="radio" name="theme" value="forest" {{'checked' if pref.theme=='forest'}}><span class="cbx-theme-swatch"></span><strong>Forest</strong><small>Green & brass</small></label>
+    </div>
+    <span class="cbx-field-title">How much should fit?</span>
+    <div class="cbx-pills"><label><input type="radio" name="density" value="comfortable" {{'checked' if pref.density=='comfortable'}}> Comfortable</label><label><input type="radio" name="density" value="compact" {{'checked' if pref.density=='compact'}}> Compact — more on screen</label></div>
+    <span class="cbx-field-title">What goes first on my Guild Hub?</span>
+    <div class="cbx-pills"><label><input type="radio" name="hub_layout" value="balanced" {{'checked' if pref.hub_layout=='balanced'}}> Balanced view</label><label><input type="radio" name="hub_layout" value="action-first" {{'checked' if pref.hub_layout=='action-first'}}> Things I can do</label></div>
+    <label class="cbx-toggle"><span><strong>Compact sidebar</strong><small>Start with the navigation collapsed to icons.</small></span><input type="checkbox" name="compact_sidebar" {{'checked' if pref.compact_sidebar}}></label>
+    <label class="cbx-toggle"><span><strong>Show guildmate suggestions</strong><small>See people you might enjoy playing with.</small></span><input type="checkbox" name="show_community" {{'checked' if pref.show_community}}></label>
+   </section>
+   <section class="cbx-panel" data-cbx-panel="interests" hidden>
+    <div class="cbx-panel-head"><h3>My activities</h3><p>Check what you enjoy. Your Hub will bring relevant groups and events forward.</p></div>
+    <div class="cbx-interest-choices">{% for name,icon,detail in interests %}
+     <label class="cbx-interest"><input type="checkbox" name="interests" value="{{name}}" {{'checked' if name in pref.interests}}><span class="cbx-interest-icon">{{icon}}</span><span><strong>{{name}}</strong><small>{{detail}}</small></span><b aria-hidden="true">✓</b></label>
+    {% endfor %}</div>
+    <div class="cbx-help-inline"><strong>You won't miss anything.</strong> All activities remain available in Find Groups and Guild Events even if you don't select them here.</div>
+    <a class="cbx-secondary-link" href="{{url_for('characters.home')}}">Edit my characters & professions ↗</a>
+   </section>
+   <section class="cbx-panel" data-cbx-panel="alerts" hidden>
+    <div class="cbx-panel-head"><h3>Notifications</h3><p>Choose what appears in your dashboard inbox. No extra Discord DMs.</p></div>
+    {% for field,name,description in [('notify_requests','Crafting & help requests','Claims, deliveries and confirmations'),('notify_groups','My groups','Someone joins or a roster changes'),('notify_events','Guild events','RSVPs and updates to activities'),('notify_commendations','My commendations','A guildmate recognizes you'),('notify_social','Social highlights','Optional guild activity updates')] %}
+     <label class="cbx-toggle"><span><strong>{{name}}</strong><small>{{description}}</small></span><input type="checkbox" name="{{field}}" {{'checked' if pref[field]}}></label>
+    {% endfor %}
+    <div class="cbx-help-inline">Important actions still appear in your Hub. Notifications control inbox noise, not what you are allowed to see.</div>
+    <a class="cbx-secondary-link" href="{{url_for('social.inbox')}}">Open notification inbox ↗</a>
+   </section>
+  </div>
+  <aside class="cbx-live" aria-label="Live settings preview">
+   <div class="cbx-live-head"><span>LIVE PREVIEW</span><small>Updates while you choose</small></div>
+   <div class="cbx-preview" id="cbx-preview" data-theme="{{pref.theme}}" data-density="{{pref.density}}" data-layout="{{pref.hub_layout}}">
+    <header><small>FLICK THE CRIT</small><strong>My Guild Hub</strong><span>◉</span></header>
+    <div class="cbx-preview-welcome"><strong>Welcome back, Guildmate.</strong><small>Everything relevant, right in front of you.</small></div>
+    <div class="cbx-preview-cards"><div><b>⚔ FIND A GROUP</b><small>Questing · Dungeons</small><em>Join now ↗</em></div><div><b>✦ EVENTS</b><small>Activities with guildmates</small><em>View events ↗</em></div><div><b>⚒ REQUESTS</b><small>Help or get help</small><em>Open board ↗</em></div><div><b>◉ MY UPDATES</b><small>Important notifications</small><em>View inbox ↗</em></div></div>
+   </div>
+   <div class="cbx-preview-caption"><strong>Nothing changes until you save.</strong><span>Appearance preview only. Your choices are stored in CritBot once saved.</span></div>
+  </aside>
+ </div>
+</form>
+</section>
+<script defer src="{{url_for('static',filename='settingsF.js',v='1')}}"></script>
+{% endblock %}

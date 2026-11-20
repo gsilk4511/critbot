@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block heading %}{{ member.display_name }}{% endblock %}
+{% block subheading %}Member profile · a corner of Azeroth made personal{% endblock %}
+{% block content %}
+<a class="profile-back" href="{{url_for('members_page')}}">← Back to member directory</a>
+<div class="member-identity p-theme-{{profile.theme}} p-layout-{{profile.layout}} p-awards-{{profile.award_view}} p-frame-{{profile.frame_style}} p-type-{{profile.typography}} p-filter-{{profile.art_filter}} p-avatar-{{profile.avatar_style}} p-density-{{profile.trophy_density}} p-rank-{{profile.rank_style}}">
+  <section class="profile-cover p-banner-{{profile.banner}}">
+    <div class="profile-cover-art" aria-hidden="true"><span class="profile-orbit"></span><span class="profile-sigil">✦</span></div>
+    <div class="profile-cover-top"><span>FLICK THE CRIT</span><span>MEMBER DOSSIER <b> / </b> {{member.member_id[-4:]}}</span></div>
+    <div class="profile-cover-body">
+      <div class="profile-monogram profile-icon-wrap" aria-label="{{member.display_name}}'s selected profile portrait">{% if profile.portrait in portraits %}<img class="profile-icon-art" src="{{url_for('static',filename=portraits[profile.portrait].file)}}" alt="">{% else %}{{member.display_name[:1]|upper}}{% endif %}{% if profile.portrait_emblem in emblems and emblems[profile.portrait_emblem].file %}<img class="profile-icon-emblem" src="{{url_for('static',filename=emblems[profile.portrait_emblem].file)}}" alt="">{% endif %}</div>
+      <div class="profile-persona">
+        <div class="profile-overline">{{profile.main_class or 'GUILD MEMBER'}} {% if editing_self %}<span class="profile-self-pill">YOUR PROFILE</span>{% endif %}</div>
+        <h2>{{member.display_name}}</h2>
+        <div class="ge-guild-rank" aria-label="Guild rank assigned by officers"><span class="ge-rank-crest" aria-hidden="true">♛</span><span><small>OFFICIAL GUILD RANK</small><strong>{{profile.guild_rank or 'Rank pending officer setup'}}</strong></span></div>
+        <p class="profile-tagline">{{profile.tagline or 'A guild legend in the making.'}}</p>
+        <div class="profile-cover-tags"><span>@{{member.username}}</span>{% if profile.main_character %}<span>{{profile.main_character}}</span>{% endif %}<span>Joined {{member.joined_at[:10] if member.joined_at else 'Guild member'}}</span></div>
+      </div>
+    </div>
+    {% if can_edit %}<div class="profile-edit-links"><a class="profile-customize" href="{{url_for('member_profile_studio',member_id=member.member_id)}}">✎ Customize profile</a>{% if editing_self %}<a class="profile-customize" href="{{url_for('characters.home')}}">⚔ Main & alts</a>{% endif %}</div>{% endif %}
+  </section>
+
+  <div class="profile-metrics" aria-label="Member achievements and activity">
+    <div><strong>{{stats.unlocks}}</strong><span>ACHIEVEMENTS</span></div>
+    <div><strong>{{stats.points}}</strong><span>GUILD POINTS</span></div>
+    <div><strong>{{'{:,}'.format(stats.messages)}}</strong><span>MESSAGES</span></div>
+    <div><strong>{{'%.1f'|format(stats.voice_seconds / 3600)}}</strong><span>VOICE HOURS</span></div>
+    <div><strong>{{stats.days}}</strong><span>ACTIVE DAYS</span></div>
+  </div>
+
+  <div class="profile-content-grid">
+    <section class="profile-display-panel profile-story">
+      <header class="profile-section-title"><div><span class="profile-overline">THE STORY</span><h3>Behind the character</h3></div><span class="profile-crest-mark" aria-hidden="true">◈</span></header>
+      {% if profile.about %}<p class="profile-bio">{{profile.about}}</p>{% else %}<p class="profile-muted">No introduction yet. Every story has to start somewhere.</p>{% endif %}
+      <div class="profile-info-list">
+        <div><span>Main character</span><strong>{{profile.main_character or 'Not listed yet'}}</strong></div>
+        {% if characters %}<div><span>Characters</span><strong>{% for c in characters %}{{c.name}} ({{c.class_name}}{{', main' if c.is_main else ', alt'}}){{', ' if not loop.last else ''}}{% endfor %}</strong></div>{% endif %}
+        <div><span>Class / specialization</span><strong>{{profile.main_class or 'Not listed yet'}}</strong></div>
+        <div><span>What I enjoy</span><strong>{{profile.interests or 'Not listed yet'}}</strong></div>
+        <div><span>When I'm around</span><strong>{{profile.availability or 'Not listed yet'}}</strong></div>
+        <div><span>What I'm working toward</span><strong>{{profile.goals or 'Not listed yet'}}</strong></div>
+      </div>
+    </section>
+    <section id="trophy-hall" class="profile-display-panel profile-collection">
+      <header class="profile-section-title"><div><span class="profile-overline">TROPHY HALL</span><h3>Earned, not given</h3><p>{{profile.showcase_caption or 'A few moments worth putting on display.'}}</p></div><span class="profile-crest-mark" aria-hidden="true">✧</span></header>
+      {% set highlights = featured if featured else collection[:2] %}
+      {% if collection %}
+        {% if profile.award_view=='featured' %}
+          <div class="profile-featured-grid">
+          {% for award in highlights %}<article class="profile-trophy trophy-{{award.rarity|lower}}">
+            <div class="profile-trophy-illustration"><span class="profile-trophy-icon">{{award.icon|achievement_icon}}</span><span class="profile-trophy-glow" aria-hidden="true"></span></div>
+            <div class="profile-trophy-copy"><span>{{award.rarity|upper}} · {{award.points}} PTS</span><h4>{{award.name}}</h4><p>{{award.caption if award.caption is defined and award.caption else 'Unlocked ' ~ award.awarded_at[:10]}}</p></div>
+          </article>{% endfor %}
+          </div>
+          {% if other_awards %}<h4 class="profile-collection-label">THE REST OF THE COLLECTION</h4><div class="profile-award-smallgrid">{% for award in other_awards %}<div class="profile-mini-award"><span>{{award.icon|achievement_icon}}</span><strong>{{award.name}}</strong><small>{{award.rarity}}</small></div>{% endfor %}</div>{% endif %}
+        {% elif profile.award_view in ('gallery','medals','timeline') %}
+          <div class="profile-featured-grid profile-gallery-grid profile-view-{{profile.award_view}}">{% for award in collection %}<article class="profile-trophy trophy-{{award.rarity|lower}}"><div class="profile-trophy-illustration"><span class="profile-trophy-icon">{{award.icon|achievement_icon}}</span></div><div class="profile-trophy-copy"><span>{{award.rarity|upper}} · {{award.points}} PTS</span><h4>{{award.name}}</h4><p>Unlocked {{award.awarded_at[:10]}}</p></div></article>{% endfor %}</div>
+        {% else %}
+          <div class="profile-award-list">{% for award in collection %}<div class="profile-award-line"><span class="profile-award-glyph">{{award.icon|achievement_icon}}</span><span><strong>{{award.name}}</strong><small>{{award.rarity}} · {{award.points}} points</small></span><time>{{award.awarded_at[:10]}}</time></div>{% endfor %}</div>
+        {% endif %}
+      {% else %}<div class="profile-no-awards"><span>✦</span><strong>The trophy hall awaits.</strong><p>Unlocked guild achievements will appear here automatically.</p></div>{% endif %}
+    </section>
+  </div>
+  <section class="profile-display-panel member-commendations" id="commendations" aria-label="Member commendations">
+    <header class="profile-section-title"><div><span class="profile-overline">THE PEOPLE BEHIND THE PLAYER</span><h3>Guildmate commendations</h3><p>Positive feedback given by other members, not an officer rank or verification of conduct.</p></div><span class="profile-crest-mark" aria-hidden="true">✦</span></header>
+    <div class="commendation-grid">
+      {% for title,explanation,emoji in commendation_traits %}
+       {% set earned=(commendations|selectattr('trait','equalto',title)|list) %}
+       <div class="commendation-trait {{'has-votes' if earned else ''}}"><span class="commendation-icon">{{emoji}}</span><span><strong>{{title}}</strong><small>{{explanation}}</small></span><em>{{earned[0].n if earned else 0}}</em></div>
+      {% endfor %}
+    </div>
+    {% if not editing_self %}
+      <form class="commendation-action" method="post" action="{{url_for('social.commend',member_id=member.member_id)}}"><label>Recognize this guildmate<select name="trait" required><option value="">Choose a quality</option>{% for title,explanation,emoji in commendation_traits %}<option value="{{title}}" {{'selected' if my_commendation==title else ''}}>{{emoji}} {{title}}</option>{% endfor %}</select></label><button type="submit" class="btn">{{'Update my commendation' if my_commendation else 'Give a commendation'}}</button></form>
+      {% if my_commendation %}<form method="post" action="{{url_for('social.withdraw',member_id=member.member_id)}}"><button class="hub-text-button" type="submit">Withdraw my commendation</button></form>{% endif %}
+    {% else %}<p class="hub-dim">Each guildmate may contribute one positive commendation to another member and may change or withdraw it.</p>{% endif %}
+  </section>
+  {% if progress or recent_days %}<section class="profile-display-panel profile-activity"><header class="profile-section-title"><div><span class="profile-overline">THE JOURNEY</span><h3>Progress & activity</h3></div></header>
+    {% if progress %}<div class="profile-progress-grid">{% for prog in progress[:4] %}<div class="profile-progress"><div><strong>{{prog.name}}</strong><small>{{prog.percent}}%</small></div><div class="profile-progress-track"><span style="width:{{prog.percent}}%"></span></div></div>{% endfor %}</div>{% endif %}
+    {% if recent_days %}<div class="profile-days">{% for day in recent_days %}<span>{{day}}</span>{% endfor %}</div>{% endif %}
+  </section>{% endif %}
+</div>
+{% if characters %}<section class="profile-display-panel"><h3>Characters &amp; roles</h3><div style="display:grid;gap:12px">{% for toon in characters %}<div style="padding:12px;border:1px solid #866b42;border-radius:8px"><strong>{{toon.name}}</strong> · {{toon.class_name}} · {{'Main' if toon.is_main else 'Alt'}}<p>Roles: {{toon.roles|join(' / ')}}</p>{% if can_character_roles %}<form method="post" action="{{url_for('characters.edit_roles',char_id=toon.id)}}" style="display:flex;gap:9px;align-items:center;flex-wrap:wrap"><input type="hidden" name="member_id" value="{{member.member_id}}">{% for role in class_roles[toon.class_name] %}<label><input type="checkbox" name="roles" value="{{role}}" {% if role in toon.roles %}checked{% endif %}> {{role}}</label>{% endfor %}<button type="submit" class="btn">Save roles</button></form>{% endif %}</div>{% endfor %}</div></section>{% endif %}
+{% if can_rank %}<section class="ge-officer-rank-box"><div><strong>Assign member guild rank</strong><p>Officer-controlled, visible on the member page. Does not promote in-game.</p></div><form method="post" action="{{url_for('member_rank_save',member_id=member.member_id)}}"><select name="guild_rank" aria-label="Guild rank"><option value="" {{'selected' if not profile.guild_rank else ''}}>Not yet assigned</option>{% for rank in ranks %}{% if rank not in ('Major Crit','Pope of Crit','Crit Lord') or viewer.level in ('owner','pope') %}<option value="{{rank}}" {{'selected' if profile.guild_rank==rank else ''}}>{{rank}}</option>{% endif %}{% endfor %}</select><button type="submit" class="ge-primary">Assign rank</button></form></section>{% endif %}
+{% if can_welcome or staff %}
+<section class="profile-private-area" aria-label="Private guild staff tools">
+<div class="profile-private-heading"><span class="profile-overline">AUTHORIZED GUILD STAFF ONLY</span><h3>Member management</h3><p>These notes are never shown on the member's public page.</p></div>
+{% if can_welcome %}
+<details class="profile-private-panel"><summary>Welcome & follow-up notes <span>Membership team</span></summary><div class="profile-private-content"><p>For new-member helpers. Accessible only with New-member Notes permission, separate from officer records.</p>
+<form method="post" action="{{url_for('member_welcome_save',member_id=member.member_id)}}" class="profile-editor">
+<label>Welcome progress<select name="welcome_status">{% for option in ['Not contacted','Welcomed','Needs help','Follow-up','Settled in'] %}<option value="{{option}}" {% if welcome and welcome.status==option %}selected{% endif %}>{{option}}</option>{% endfor %}</select></label>
+<label>Short follow-up note<textarea name="welcome_note" maxlength="1000" rows="3" required>{{welcome.notes if welcome else ''}}</textarea></label><div class="profile-form-actions"><button type="submit" class="btn">Save follow-up</button></div></form>
+{% if welcome_history %}<h4>Previous follow-ups</h4>{% for entry in welcome_history %}<div class="ops-followup"><strong>{{entry.status}}</strong><small> · {{entry.recorded_at[:16]}} UTC</small><p>{{entry.note}}</p></div>{% endfor %}{% endif %}</div></details>
+{% endif %}
+{% if staff %}<details class="profile-private-panel"><summary>Private officer notes <span>Officer clearance required</span></summary><div class="profile-private-content"><p>Visible only with Private Officer Notes permission. Keep notes factual and related to guild operations.</p>
+<form method="post" action="{{url_for('member_staff_save',member_id=member.member_id)}}" class="profile-editor"><div class="profile-input-row"><label>Member status<select name="staff_status">{% for option in ['No designation','New member','Good standing','Follow-up','Inactive'] %}<option value="{{option}}" {% if profile.staff_status==option %}selected{% endif %}>{{option}}</option>{% endfor %}</select></label><label>Department<input name="staff_department" maxlength="80" value="{{profile.staff_department}}"></label></div>
+<label>Officer notes<textarea name="staff_notes" maxlength="2000" rows="4">{{profile.staff_notes}}</textarea></label><button type="submit" class="btn">Save private notes</button></form><small>Last update: {{profile.staff_updated_at or 'Never'}}</small></div></details>{% endif %}
+</section>
+{% endif %}
+{% endblock %}

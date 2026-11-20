@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block heading %}My Characters{% endblock %}
+{% block subheading %}One Discord account. A main and all the alts you want to bring along.{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{{url_for('static',filename='guild-hub.css',v='hub2')}}">{% endblock %}
+{% block content %}
+<section class="hub-mini-page">
+ <div class="hub-section-heading"><div><span class="hub-eyebrow">YOUR ADVENTURERS</span><h2>Main & alts</h2></div><a href="{{url_for('hub.home')}}">← Guild Hub</a></div>
+ <p class="hub-muted">Choose a main for your public profile. Every other saved toon is an alt. Use any one of them for dungeon signups or crafting orders.</p>
+ <div class="hub-character-grid">
+ {% for toon in characters %}
+  <div class="hub-character-card">
+   <div><span class="hub-character-symbol">{{'♛' if toon.is_main else '⚔'}}</span><strong>{{toon.name}}</strong><small>{{toon.class_name}} · {{'MAIN' if toon.is_main else 'ALT'}} · {{toon.roles|join(' / ')}}{% if toon.profession_one %} · {{toon.profession_one}}{% endif %}{% if toon.profession_two %} / {{toon.profession_two}}{% endif %}</small></div>
+   <div class="hub-character-actions"><form method="post" action="{{url_for('characters.edit_roles',char_id=toon.id)}}" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span>Roles:</span>{% for role in classes[toon.class_name] %}<label style="display:flex;gap:3px;align-items:center"><input type="checkbox" name="roles" value="{{role}}" {% if role in toon.roles %}checked{% endif %}>{{role}}</label>{% endfor %}<button type="submit" class="hub-secondary">Save roles</button></form>
+    {% if not toon.is_main %}<form method="post" action="{{url_for('characters.mark_main',char_id=toon.id)}}"><button type="submit" class="hub-secondary">Set as main</button></form>{% endif %}
+    <form method="post" action="{{url_for('characters.delete',char_id=toon.id)}}" onsubmit="return confirm('Remove this character from your roster?')"><button type="submit" class="hub-text-button">Remove</button></form>
+   </div>
+  </div>
+ {% else %}<div class="hub-empty"><h3>No characters yet</h3><p>You can still use the Guild Hub. Add a toon when you're ready.</p></div>{% endfor %}
+ </div>
+ <details class="hub-form-drawer" {% if not characters %}open{% endif %}>
+  <summary>＋ Add a character or alt</summary>
+  <form class="hub-order-form" method="post" action="{{url_for('characters.create')}}">
+   <div class="hub-form-row"><label>Character name<input name="name" minlength="2" maxlength="40" required placeholder="e.g. WorshipingCrit"></label>
+   <label>Class<select name="class_name" required><option value="">Choose class</option>{% for cls in classes %}<option value="{{cls}}">{{cls}}</option>{% endfor %}</select></label></div>
+   <div class="hub-form-row"><label>First profession (optional)<select name="profession_one">{% for p in professions %}<option value="{{p}}">{{p or 'None'}}</option>{% endfor %}</select></label>
+   <label>Second profession (optional)<select name="profession_two">{% for p in professions %}<option value="{{p}}">{{p or 'None'}}</option>{% endfor %}</select></label></div>
+   <fieldset><legend>Character roles — choose one or more</legend><div id="new-character-roles" style="display:flex;gap:12px;flex-wrap:wrap"></div></fieldset>
+   <label class="hub-check-label"><input type="checkbox" name="is_main" value="1"> Make this my main character</label>
+   <button type="submit" class="hub-primary">Save character</button>
+  </form>
+ </details>
+ <p class="hub-muted">Characters and professions are member-reported; CritBot does not verify ownership with World of Warcraft.</p>
+</section>
+<script>const classRoles={{classes|tojson}};const classSelect=document.querySelector('select[name="class_name"]');const rolesBox=document.getElementById('new-character-roles');if(classSelect&&rolesBox){const refresh=()=>{rolesBox.replaceChildren();(classRoles[classSelect.value]||[]).forEach(role=>{const label=document.createElement('label');const c=document.createElement('input');c.type='checkbox';c.name='roles';c.value=role;c.checked=true;label.append(c,document.createTextNode(' '+role));rolesBox.append(label);});};classSelect.addEventListener('change',refresh);refresh();}</script>
+{% endblock %}

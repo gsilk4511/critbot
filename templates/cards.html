@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% block heading %}Unlock Cards{% endblock %}{% block subheading %}Every achievement deserves its moment. Preview the guild’s rarity styles here.{% endblock %}{% block content %}
+<section class="compact-panel" style="padding:24px"><h2 style="margin-top:0">Card studio</h2><p class="subtitle">Previews never award achievements or change points and roles. Live cards use the member’s Discord avatar; dashboard previews use their initial.</p>
+{% if achievements %}<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:18px 0"><div><label for="card-achievement">Achievement</label><select id="card-achievement">{% for a in achievements %}<option value="{{ a.id }}">{{ a.name }}</option>{% endfor %}</select></div><div><label for="card-member">Member</label><select id="card-member"><option value="">Guild Member</option>{% for m in members %}<option value="{{ m.member_id }}">{{ m.display_name }} ({{ m.username }})</option>{% endfor %}</select></div><div><label for="card-rarity">Preview rarity</label><select id="card-rarity"><option value="">Saved rarity</option>{% for r in rarities %}<option value="{{ r }}">{{ r }}</option>{% endfor %}</select></div></div>
+<p id="card-status" class="subtitle" aria-live="polite">Loading card…</p><img id="card-preview" alt="Flick the Crit achievement unlock card preview" style="display:block;width:100%;max-width:1200px;height:auto;border-radius:12px;border:1px solid #735174;margin:16px auto"><p class="subtitle">Common → Uncommon → Rare → Epic → Legendary. Legendary cards have the strongest gold glow and spark effects. Changing the preview rarity does not edit the achievement.</p>
+<script>
+(() => {
+ const img=document.getElementById('card-preview');
+ function update(){const params=new URLSearchParams({achievement:document.getElementById('card-achievement').value,member:document.getElementById('card-member').value,rarity:document.getElementById('card-rarity').value});document.getElementById('card-status').textContent='Rendering card…';img.src={{ url_for('card_preview')|tojson }}+'?'+params;}
+ img.addEventListener('load',()=>document.getElementById('card-status').textContent='Preview only · No achievements awarded');
+ img.addEventListener('error',()=>document.getElementById('card-status').textContent='Could not render the card. See logs/critbot.log.');
+ for(const id of ['card-achievement','card-member','card-rarity'])document.getElementById(id).addEventListener('change',update);update();
+})();
+</script>{% else %}<p>Create an achievement first to preview its unlock card.</p>{% endif %}</section>
+{% endblock %}

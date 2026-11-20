@@ -1,0 +1,4 @@
+{% extends 'base.html' %}
+{% block heading %}Access changed{% endblock %}
+{% block subheading %}Your Discord login is still active. You just no longer have permission for this action.{% endblock %}
+{% block content %}<section class="ops-panel"><h2>No permission for that action</h2><p>Your dashboard permissions were updated while you were signed in. Nothing was submitted or changed.</p><p><a class="btn" href="{{url_for('members_page')}}">Return to member directory</a> &nbsp; <a href="{{url_for('member_profile',member_id=viewer.discord_id)}}">My profile</a></p></section>{% endblock %}

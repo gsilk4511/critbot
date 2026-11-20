@@ -1,0 +1,1 @@
+CritBot 1.2.4: Apply this code-only patch on top of deployed 1.2.3. Keep .env and data/critbot.db intact. Restart app and force reload browser (Ctrl+Shift+R). The patch changes only visual layout and version metadata.

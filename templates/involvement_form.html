@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block heading %}Guild Involvement{% endblock %}{% block subheading %}A few quick questions to help us build the guild you want.{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{{url_for('static',filename='involvement-123.css',v='123')}}">{% endblock %}
+{% block content %}
+<div class="ci-wrap"><header class="ci-heading"><div><h2>Tell us about yourself</h2><p>Private to authorized leadership. Not an application or a commitment.</p></div><span class="ci-pill">{{'Last updated '+submitted_at if submitted_at else 'About 3 minutes'}}</span></header>
+<form action="{{url_for('involvement.submit')}}" method="post" class="ci-wrap">
+{% set groups=[('About you','How you want guildmates to know you',0,2),('Your playtime','What you play and when you are around',2,5),('Guild activities','The events and ways you might like to help',5,8),('What matters','Your expectations and optional feedback',8,10)] %}
+{% for heading,sub,start,stop in groups %}
+<section class="ci-section"><div class="ci-section-head"><span class="ci-number">{{loop.index}}</span><div><h3>{{heading}}</h3><p>{{sub}}</p></div></div><div class="ci-field-grid">
+{% for key,label,kind,choices in questions[start:stop] %}
+<div class="ci-field {{'ci-field-wide' if kind in ('multi','textarea') else ''}}"><label class="ci-field-label" {% if kind in ('text','single','textarea') %}for="ci-{{key}}"{% endif %}>{{label}}</label>
+{% if kind=='multi' %}<div class="ci-choices">{% for choice in choices %}<label class="ci-choice"><input type="checkbox" name="{{key}}" value="{{choice}}" {% if choice in values.get(key,[]) %}checked{% endif %}><span>{{choice}}</span></label>{% endfor %}</div>
+{% elif kind=='single' %}<select id="ci-{{key}}" name="{{key}}" required><option value="">Select one…</option>{% for choice in choices %}<option value="{{choice}}" {% if values.get(key)==choice %}selected{% endif %}>{{choice}}</option>{% endfor %}</select>
+{% elif kind=='textarea' %}<textarea id="ci-{{key}}" name="{{key}}" maxlength="700" rows="3" placeholder="Anything you want leadership to know (optional)…">{{values.get(key,'')}}</textarea>
+{% else %}<input id="ci-{{key}}" type="text" name="{{key}}" maxlength="80" value="{{values.get(key,'')}}" required placeholder="{{'What should we call you?' if key=='preferred_name' else 'Your main in WoW Forever'}}">{% endif %}
+</div>{% endfor %}</div></section>{% endfor %}
+<footer class="ci-footer"><small>You can come back and change your answers any time.</small><button type="submit">Save my responses</button></footer>
+</form></div>{% endblock %}

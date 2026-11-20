@@ -1,0 +1,17 @@
+/* Rev N: full icon artwork shared by officer collection, profiles, and preview. */
+.ftc-ach-art{display:block;width:100%;height:100%;object-fit:contain;image-rendering:auto;filter:drop-shadow(0 1px 5px rgba(0,0,0,.32))}
+.catalog-icon:has(.ftc-ach-art),.list-icon:has(.ftc-ach-art){display:flex;align-items:center;justify-content:center;flex:0 0 72px;width:72px;height:72px;min-width:72px;padding:3px;line-height:1}
+.profile-trophy-icon:has(.ftc-ach-art),.profile-trophy-illustration:has(.ftc-ach-art){display:flex;align-items:center;justify-content:center;overflow:visible}
+.profile-trophy-icon:has(.ftc-ach-art){width:105px;height:105px;max-width:100%;max-height:100%}
+.profile-mini-award span:has(.ftc-ach-art),.profile-award-glyph:has(.ftc-ach-art),.studio-award-icon:has(.ftc-ach-art){display:inline-flex;align-items:center;justify-content:center;width:54px;height:54px;flex:none}
+.studio-preview-award>span:has(.ftc-ach-art){display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;flex-shrink:0}
+.catalog-item .catalog-icon{aspect-ratio:1/1}
+@media(max-width:720px){.catalog-icon:has(.ftc-ach-art),.list-icon:has(.ftc-ach-art){width:56px;height:56px;min-width:56px;flex-basis:56px}}
+
+/* New achievement browser layout: playable trophy-sized art. */
+.achievement-catalog-grid .catalog-item{display:flex;align-items:center;gap:14px;min-height:145px}
+.achievement-catalog-grid .catalog-item .catalog-icon{min-width:90px;width:90px;height:90px;flex-basis:90px}
+.profile-award-list .profile-award-glyph:has(img){height:54px;width:54px}
+.profile-featured-grid .profile-trophy-illustration:has(img){min-height:124px}
+.studio-award-heading .studio-award-icon:has(img){width:54px;height:54px}
+.picker-option .list-icon:has(img){min-width:40px;width:40px;height:40px;flex-basis:40px}
